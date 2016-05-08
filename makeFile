@@ -1,0 +1,11 @@
+
+#!/bin/bash
+
+#path to directories
+GTEST_DIR="/home/szymon/TDD/googletest"
+GMOCK_DIR="/home/szymon/TDD/googlemock"
+
+
+#run compiler
+g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread main.cpp lib/libgmock.a -o ellip
+
