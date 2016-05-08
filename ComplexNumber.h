@@ -53,28 +53,43 @@ public:
 		return atan(complex.imag/complex.real);
 	}
 
-	COMPLEX Addition() {
-		return COMPLEX();
+	COMPLEX Add(COMPLEX a, COMPLEX b) {
+		return COMPLEX(a.real + b.real, a.imag + b.imag);
 	}
 
-	COMPLEX Subtraction() {
-		return COMPLEX();
+	COMPLEX Sub(COMPLEX a, COMPLEX b) {
+		return COMPLEX(a.real - b.real, a.imag - b.imag);
 	}
 
-	COMPLEX Multiplication() {
-		return COMPLEX ();
+	COMPLEX Mul(COMPLEX a, COMPLEX b) {
+		COMPLEX complex;
+		complex.real = a.real * b.real - a.imag * b.imag;
+		complex.imag = a.imag * b.real + a.real * b.imag;
+		return complex;
 	}
 
-	COMPLEX Division() {
-		return COMPLEX ();
+	COMPLEX Div(COMPLEX a, COMPLEX b) {
+		COMPLEX complex;
+		double  denominator;
+
+		denominator = b.real * b.real + b.imag * b.imag;
+		complex.real = (a.real * b.real + a.imag * b.imag)/denominator;
+		complex.imag = (a.imag * b.real - a.real * b.imag)/denominator;
+
+		return complex;
 	}
 
-	COMPLEX Reciprocal() {
-		return COMPLEX ();
+	COMPLEX Rec(COMPLEX a) {
+		return Div(COMPLEX(1.0), a);
 	}
 
-	COMPLEX SquareRoot() {
-		return COMPLEX ();
+	COMPLEX Sqr(COMPLEX a) {
+
+		COMPLEX complex;
+		complex.real = sqrt( (a.real + Magnitude(a))/2 );
+		complex.imag = sqrt( (-a.real + Magnitude(a))/2 );
+		if(a.imag<0) complex.imag *= -1.0;
+		return complex;
 	}
 };
 
