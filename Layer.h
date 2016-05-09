@@ -22,44 +22,44 @@ public:
 
 private:
 
-	COMPLEX n;	//refractive index
-	double t;	//thickness of layer
+	COMPLEX refractiveIndex;	//refractive index
+	double thickness;		//thickness of layer
 };
 
 
 //constrtuctors of layers
 Layer::Layer() {
-	n = {1.0, 0.0}; 
-	t = 0.0;
+	refractiveIndex = {1.0, 0.0}; 
+	thickness = 0.0;
 }
 
-Layer::Layer(COMPLEX refractiveIndex) {
-	n = refractiveIndex;
-	t = 0.0;
+Layer::Layer(COMPLEX x) {
+	refractiveIndex = x;
+	thickness = 0.0;
 }
 
-Layer::Layer(COMPLEX refractiveIndex, double thickness) {
-	n = refractiveIndex;
-	t = thickness;
+Layer::Layer(COMPLEX x, double y) {
+	refractiveIndex = x;
+	thickness = y;
 }
 
 Layer::~Layer() {
 }
 
 COMPLEX Layer::GetRefractiveIndex() {	
-	return {n.real, n.imag};
+	return {refractiveIndex.real, refractiveIndex.imag};
 }
 
-void Layer::SetRefractiveIndex(COMPLEX refractiveIndex) {
-	n = refractiveIndex;
+void Layer::SetRefractiveIndex(COMPLEX x) {
+	refractiveIndex = x;
 }
 
 double Layer::GetThickness() {
-	return t;
+	return thickness;
 }
 
-void Layer::SetThickness(double thickness) {
-	t = thickness;
+void Layer::SetThickness(double x) {
+	thickness = x;
 }
 
 
