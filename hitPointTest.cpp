@@ -61,6 +61,7 @@ TEST_F(RayHitPoint, ReflectionDirection) {
 	ASSERT_EQ(refl.GetRayDirection(), !inc.GetRayDirection());
 }
 
+//reflectance p-type polarization
 TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p(), 0.0000001);
 }
@@ -70,6 +71,19 @@ TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
 	HitPoint hitPoint2(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0252491*inc.GetRayAmp_p(), 0.0000001);
 }
+
+//reflectance s-type polarization
+TEST_F(RayHitPoint, ReflectionAmplitudeS0deg) {
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.04*inc.GetRayAmp_p(), 0.0000001);
+}
+
+TEST_F(RayHitPoint, ReflectionAmplitudeS30deg) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0577961*inc.GetRayAmp_p(), 0.0000001);
+}
+
+
 
 
 

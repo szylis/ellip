@@ -49,23 +49,31 @@ void HitPoint::ReflectionPhaseShift(Ray& rRay) {
 
 void HitPoint::Reflectance(Layer top, Layer bottom, Ray inc, Ray& rR) {
 
-		ComplexNumber cplx;
+	ComplexNumber cplx;
 
-		COMPLEX cX = cplx.Mul(bottom.GetRefractiveIndex(), cos(inc.GetRayAngle()*MY_PI/180));	// n2*cos(theta)
+	COMPLEX cX = cplx.Div(top.GetRefractiveIndex(), bottom.GetRefractiveIndex());	// (n1/n2)
 
-		COMPLEX cY = cplx.Div(top.GetRefractiveIndex(), bottom.GetRefractiveIndex());		// (n1/n2)
-
-		cY = cplx.Mul(cY, sin(inc.GetRayAngle()*MY_PI/180));			// (n1/n2)*sin(theta)
-		cY = cplx.Mul(cY, cY);							// ((n1/n2)*sin(theta))^2
-		cY = cplx.Sqr(cplx.Sub(1.0, cY));					// ( sqrt(1 - ((n1/n2)*sin(theta))^2)
-
-		COMPLEX cZ = cplx.Mul(top.GetRefractiveIndex(), cY);
+	cX = cplx.Mul(cX, sin(inc.GetRayAngle()*MY_PI/180));			// (n1/n2)*sin(theta)
+	cX = cplx.Mul(cX, cX);							// ((n1/n2)*sin(theta))^2
+	cX = cplx.Sqr(cplx.Sub(1.0, cX));					// ( sqrt(1 - ((n1/n2)*sin(theta))^2)
 
 
-		double rp = cplx.Magnitude(cplx.Div(cplx.Sub(cZ, cX), cplx.Add(cZ, cX)));
-		rp = rp * rp;	//reflectance p- polarization
+	COMPLEX cYp = cplx.Mul(bottom.GetRefractiveIndex(), cos(inc.GetRayAngle()*MY_PI/180));	// n2*cos(theta)
+	COMPLEX cYs = cplx.Mul(top.GetRefractiveIndex(), cos(inc.GetRayAngle()*MY_PI/180));	// n1*cos(theta)
 
-		rR.SetRayAmp_p(rp);
+	COMPLEX cZp = cplx.Mul(top.GetRefractiveIndex(), cX);
+	COMPLEX cZs = cplx.Mul(bottom.GetRefractiveIndex(), cX);
+
+	//reflectance p- polarization
+	double rp = cplx.Magnitude(cplx.Div(cplx.Sub(cZp, cYp), cplx.Add(cZp, cYp)));
+	rp = rp * rp;
+
+	//reflectance s- polarization
+	double rs = cplx.Magnitude(cplx.Div(cplx.Sub(cYs, cZs), cplx.Add(cYs, cZs)));
+	rs = rs * rs;
+
+	rR.SetRayAmp_p(rp);
+	rR.SetRayAmp_s(rs);
 }
 
 #endif
