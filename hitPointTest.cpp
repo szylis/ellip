@@ -56,5 +56,10 @@ TEST_F(RayHitPoint, ReflectionPhase) {
 		ASSERT_DOUBLE_EQ(refl.GetRayPhase(), inc.GetRayPhase() + MY_PI); }
 }
 
+TEST_F(RayHitPoint, ReflectionDirection) {
+	ASSERT_EQ(refl.GetRayDirection(), !inc.GetRayDirection());
+}
+
+
 
 

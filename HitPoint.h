@@ -24,7 +24,8 @@ private:
 HitPoint::HitPoint(Ray inc, Layer layer, Ray &rRefl, Ray &rRefr) {
 
 	rRefl = inc;
-	ReflectionPhaseShift(rRefl);	//phase shift for reflection ray
+	ReflectionPhaseShift(rRefl);			//phase shift for reflection ray
+	rRefl.SetRayDirection(!inc.GetRayDirection());  //invers diretion of propagation
 }
 
 HitPoint::~HitPoint() {
