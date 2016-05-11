@@ -10,16 +10,16 @@ class RayHitPoint: public testing::Test {
 public:
 
 //members:
+//	HitPoint hitPoint;
 	Layer glass;
 	Ray rInc;
 	Ray rRefl;
 	Ray rRefr;
 
 //construtor:
-	RayHitPoint(): glass({1.45, 0.0}, 0.2), rInc(30.0), rRefl(45.0), rRefr() {
+	RayHitPoint(): glass({1.45, 0.0}, 0.2), rInc(30.0), rRefl(45.0), rRefr() {};
 
-		HitPoint hitPoint(rInc, glass, rRefl, rRefr);
-	};
+//		hitPoint(rInc, glass, rRefl, rRefr) {};
 
 //deconstructor:
 	~RayHitPoint() {};
