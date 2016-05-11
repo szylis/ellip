@@ -6,40 +6,37 @@
 #define MY_PI 3.141592653589793238
 #endif 
 
-//#include <math.h>
-
 struct COMPLEX {
+
+public:
 	double real, imag;
 
-	COMPLEX() {
-		real = 0; imag = 0;
-	}
-
-	COMPLEX(double x) {
-		real = x; imag = 0;
-	}
-
-	COMPLEX(double x, double y) {
-		real = x, imag = y;
-	}
+	COMPLEX() { real = 0; imag = 0; }
+	COMPLEX(double x) { real = x; imag = 0; }
+	COMPLEX(double x, double y) { real = x, imag = y; }
 };
+
 
 class ComplexNumber {
 
 public:
 
+//copy equal value
 	COMPLEX Equality(COMPLEX complex) const {
 		return complex;
 	}
 
+//conjugation
 	COMPLEX Conjugate(COMPLEX complex) const {
 		return COMPLEX(complex.real, -1.0*complex.imag);
 	}
 
+//magnitude
 	double Magnitude(COMPLEX complex) const {
 		return  sqrt(complex.real*complex.real + complex.imag*complex.imag);
 	}
 
+//phase
 	double Phase(COMPLEX complex) const {
 		if(complex.real == 0 && complex.imag == 0)
 			return 0;
@@ -53,14 +50,34 @@ public:
 		return atan(complex.imag/complex.real);
 	}
 
+//addition
+	COMPLEX Add(COMPLEX a, double b) {
+		return COMPLEX(a.real + b, a.imag);
+	}
+
+	COMPLEX Add(double a, COMPLEX b) {
+		return COMPLEX(a + b.real, b.imag);
+	}
+
 	COMPLEX Add(COMPLEX a, COMPLEX b) {
 		return COMPLEX(a.real + b.real, a.imag + b.imag);
+	}
+
+//substraction
+	COMPLEX Sub(COMPLEX a, double b) {
+		return COMPLEX(a.real - b, a.imag);
+	}
+
+	COMPLEX Sub(double a, COMPLEX b) {
+		return COMPLEX(a - b.real, -b.imag);
 	}
 
 	COMPLEX Sub(COMPLEX a, COMPLEX b) {
 		return COMPLEX(a.real - b.real, a.imag - b.imag);
 	}
 
+
+//multiplication
 	COMPLEX Mul(COMPLEX a, COMPLEX b) {
 		COMPLEX complex;
 		complex.real = a.real * b.real - a.imag * b.imag;
@@ -68,6 +85,15 @@ public:
 		return complex;
 	}
 
+	COMPLEX Mul(COMPLEX a, double b) {
+		return Mul(a, {b, 0.0});
+	}
+
+	COMPLEX Mul(double a, COMPLEX b) {
+		return Mul({a, 0.0}, b);
+	}
+
+//devision
 	COMPLEX Div(COMPLEX a, COMPLEX b) {
 		COMPLEX complex;
 		double  denominator;
@@ -79,10 +105,21 @@ public:
 		return complex;
 	}
 
-	COMPLEX Rec(COMPLEX a) {
-		return Div(COMPLEX(1.0), a);
+	COMPLEX Div(COMPLEX a, double b) {
+		return Div(a, {b, 0.0});
 	}
 
+	COMPLEX Div(double a, COMPLEX b) {
+		return Div({a, 0.0}, b);
+	}
+
+//reciprocity
+	COMPLEX Rec(COMPLEX a) {
+		return Div(1.0, a);
+	}
+
+
+//squre root
 	COMPLEX Sqr(COMPLEX a) {
 
 		COMPLEX complex;

@@ -10,17 +10,18 @@ class RayHitPoint: public testing::Test {
 public:
 
 //members:
+	Layer air;
 	Layer glass;
 	Ray inc;
 	Ray refl;
 	Ray refr;
 
 //construtor:
-	RayHitPoint(): glass({1.45, 0.0}, 0.2),
-			inc(30.0, 1.0, 1.0, MY_PI*1.7),
-			refl(0), refr() {
+	RayHitPoint(): air({1.0, 0.0}, 0.0), glass({1.5, 0.0}, 0.2),
+			inc(0.0, 1.0, 1.0, 0.0, 0.632, true, 0),
+			refl(), refr() {
 
-		HitPoint hitPoint(inc, glass, refl, refr);
+		HitPoint hitPoint(air, glass, inc, refl, refr);
 	};
 
 //deconstructor:
@@ -47,8 +48,8 @@ TEST_F(RayHitPoint, ReflectionPhase) {
 	else {
 		ASSERT_DOUBLE_EQ(refl.GetRayPhase(), inc.GetRayPhase() + MY_PI); }
 
-	inc.SetRayPhase(MY_PI*0.4);
-	HitPoint hitPoint2(inc, glass, refl, refr);
+	inc.SetRayPhase(MY_PI*1.4);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
 
 	if(inc.GetRayPhase() > MY_PI) {
 		ASSERT_DOUBLE_EQ(refl.GetRayPhase(), inc.GetRayPhase() - MY_PI); }
@@ -58,6 +59,16 @@ TEST_F(RayHitPoint, ReflectionPhase) {
 
 TEST_F(RayHitPoint, ReflectionDirection) {
 	ASSERT_EQ(refl.GetRayDirection(), !inc.GetRayDirection());
+}
+
+TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
+	ASSERT_DOUBLE_EQ(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p());
+}
+
+TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_DOUBLE_EQ(refl.GetRayAmp_p(), 0.025*inc.GetRayAmp_p());
 }
 
 
