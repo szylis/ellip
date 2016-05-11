@@ -11,7 +11,8 @@ public:
 
 TEST_F(PropagatedRay, Constructor_0) {
 	ASSERT_DOUBLE_EQ(ray.GetRayAngle(), 0.0);
-	ASSERT_DOUBLE_EQ(ray.GetRayAmplitude(), 1.0);
+	ASSERT_DOUBLE_EQ(ray.GetRayAmp_p(), 1.0);
+	ASSERT_DOUBLE_EQ(ray.GetRayAmp_s(), 1.0);
 	ASSERT_DOUBLE_EQ(ray.GetRayPhase(), 0.0);
 	ASSERT_DOUBLE_EQ(ray.GetRayWavelength(), 1.0);
 	ASSERT_EQ(ray.GetRayDirection(), true);
@@ -22,7 +23,8 @@ TEST_F(PropagatedRay, Constructor_1) {
 
 	Ray laser(30.0);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 1.0);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 1.0);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 1.0);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), 0.0);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 1.0);
 	ASSERT_EQ(laser.GetRayDirection(), true);
@@ -32,20 +34,23 @@ TEST_F(PropagatedRay, Constructor_1) {
 
 TEST_F(PropagatedRay, Constructor_2) {
 
-	Ray laser(30.0, 0.6);
+	Ray laser(30.0, 0.6, 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), 0.0);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 1.0);
 	ASSERT_EQ(laser.GetRayDirection(), true);
 	ASSERT_EQ(laser.GetRayLayer(), 0);
 }
 
+
 TEST_F(PropagatedRay, Constructor_3) {
 
-	Ray laser(30.0, 0.6, MY_PI);
+	Ray laser(30.0, 0.6, 0.8, MY_PI);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), MY_PI);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 1.0);
 	ASSERT_EQ(laser.GetRayDirection(), true);
@@ -54,9 +59,10 @@ TEST_F(PropagatedRay, Constructor_3) {
 
 TEST_F(PropagatedRay, Constructor_4) {
 
-	Ray laser(30.0, 0.6, MY_PI, 0.632);
+	Ray laser(30.0, 0.6, 0.8, MY_PI, 0.632);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), MY_PI);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 0.632);
 	ASSERT_EQ(laser.GetRayDirection(), true);
@@ -65,9 +71,10 @@ TEST_F(PropagatedRay, Constructor_4) {
 
 TEST_F(PropagatedRay, Constructor_5) {
 
-	Ray laser(30.0, 0.6, MY_PI, 0.632, false);
+	Ray laser(30.0, 0.6, 0.8, MY_PI, 0.632, false);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), MY_PI);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 0.632);
 	ASSERT_EQ(laser.GetRayDirection(), false);
@@ -76,23 +83,30 @@ TEST_F(PropagatedRay, Constructor_5) {
 
 TEST_F(PropagatedRay, Constructor_6) {
 
-	Ray laser(30.0, 0.6, MY_PI, 0.632, false, 3);
+	Ray laser(30.0, 0.6, 0.8, MY_PI, 0.632, false, 3);
 	ASSERT_DOUBLE_EQ(laser.GetRayAngle(), 30.0);
-	ASSERT_DOUBLE_EQ(laser.GetRayAmplitude(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_p(), 0.6);
+	ASSERT_DOUBLE_EQ(laser.GetRayAmp_s(), 0.8);
 	ASSERT_DOUBLE_EQ(laser.GetRayPhase(), MY_PI);
 	ASSERT_DOUBLE_EQ(laser.GetRayWavelength(), 0.632);
 	ASSERT_EQ(laser.GetRayDirection(), false);
 	ASSERT_EQ(laser.GetRayLayer(), 3);
 }
 
+
 TEST_F(PropagatedRay, SetRayAngle) {
 	ray.SetRayAngle(28.8);
 	ASSERT_DOUBLE_EQ(ray.GetRayAngle(), 28.8);
 }
 
-TEST_F(PropagatedRay, SetRayAmplitude) {
-	ray.SetRayAmplitude(0.77);
-	ASSERT_DOUBLE_EQ(ray.GetRayAmplitude(), 0.77);
+TEST_F(PropagatedRay, SetRayAmp_p) {
+	ray.SetRayAmp_p(0.77);
+	ASSERT_DOUBLE_EQ(ray.GetRayAmp_p(), 0.77);
+}
+
+TEST_F(PropagatedRay, SetRayAmp_s) {
+	ray.SetRayAmp_s(0.55);
+	ASSERT_DOUBLE_EQ(ray.GetRayAmp_s(), 0.55);
 }
 
 TEST_F(PropagatedRay, SetRayPhase) {
@@ -114,3 +128,4 @@ TEST_F(PropagatedRay, SetRayLayer) {
 	ray.SetRayLayer(2);
 	ASSERT_EQ(ray.GetRayLayer(), 2);
 }
+

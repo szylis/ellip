@@ -1,3 +1,19 @@
+//---------------------------------------------------------------------------------
+//
+// Class holding the light ray object
+//
+// Ray is characterised by:
+//	- angle of ray propagation in reference to layer stack normal
+//	- amp_p amplitude of 'p' type polarization
+//	- amp_s amplitude of 's' type polarization
+//	- phase of the ray [rad]
+//	- wavelength of the ray [um]
+//	- direction (true: for transmission towards substrate; false: towards air)
+//	- layer where ray is at particular moment
+//
+// Author: Szymon Lis	twitter: @drSzymonLis	email: szymonlis@yahoo.com
+//---------------------------------------------------------------------------------
+
 #ifndef Ray_h
 #define Ray_h
 
@@ -11,46 +27,52 @@ public:
 //constructor prototypes
 	Ray();
 	Ray(double);
-	Ray(double, double);
 	Ray(double, double, double);
 	Ray(double, double, double, double);
-	Ray(double, double, double, double, bool);
-	Ray(double, double, double, double, bool, int); 
+	Ray(double, double, double, double, double);
+	Ray(double, double, double, double, double, bool);
+	Ray(double, double, double, double, double, bool, int); 
 	~Ray();
 
-//methods
-	double GetRayAngle();
+//prototypes
+	double GetRayAngle() const;
 	void SetRayAngle(double);
 
-	double GetRayAmplitude();
-	void SetRayAmplitude(double);
+	double GetRayAmp_p() const;
+	void SetRayAmp_p(double);
 
-	double GetRayPhase();
+	double GetRayAmp_s() const;
+	void SetRayAmp_s(double);
+
+	double GetRayPhase() const;
 	void SetRayPhase(double);
 
-	double GetRayWavelength();
+	double GetRayWavelength() const;
 	void SetRayWavelength(double);
 
-	bool GetRayDirection();
+	bool GetRayDirection() const;
 	void SetRayDirection(bool);
 
-	int GetRayLayer();
+	int GetRayLayer() const;
 	void SetRayLayer(int);
 
+//members
 private:
 	
-	double angle;
-	double amplitude;
-	double phase;
-	double wavelength;
-	bool direction;
-	int layer;
+	double angle;		//angle of propagation
+	double amp_p;		//'p' type polarization amplitude
+	double amp_s;		//'s' type polarization amplitude
+	double phase;		//phase [rad]
+	double wavelength;	//wavelength [um]
+	bool direction;		//true when ray travels towards substrate
+	int layer;		//number of layer where ray is
 };
 
-//constructors of ray
+//definition of ray constructors
 Ray::Ray() {
 	angle = 0.0;
-	amplitude = 1.0;
+	amp_p = 1.0;
+	amp_s = 1.0;
 	phase = 0.0;
 	wavelength = 1.0;
 	direction = true;
@@ -59,62 +81,70 @@ Ray::Ray() {
 
 Ray::Ray(double x) {
 	angle = x;
-	amplitude = 1.0;
+	amp_p = 1.0;
+	amp_s = 1.0;
 	phase = 0.0;
 	wavelength = 1.0;
 	direction = true;
 	layer = 0;
 }
 
-Ray::Ray(double x, double y) {
+Ray::Ray(double x, double p, double s) {
 	angle = x;
-	amplitude = y;
+	amp_p = p;
+	amp_s = s;
 	phase = 0.0;
 	wavelength = 1.0;
 	direction = true;
 	layer = 0;
 }
 
-Ray::Ray(double x, double y, double p) {
+Ray::Ray(double x, double p, double s, double y) {
 	angle = x;
-	amplitude = y;
-	phase = p;
+	amp_p = p;
+	amp_s = s;
+	phase = y;
 	wavelength = 1.0;
 	direction = true;
 	layer = 0;
 }
 
-Ray::Ray(double x, double y, double p, double w) {
+Ray::Ray(double x, double p, double s, double y, double w) {
 	angle = x;
-	amplitude = y;
-	phase = p;
+	amp_p = p;
+	amp_s = s; 
+	phase = y;
 	wavelength = w;
 	direction = true;
 	layer = 0;
 }
 
-Ray::Ray(double x, double y, double p, double w, bool d) {
+Ray::Ray(double x, double p, double s, double y, double w, bool d) {
 	angle = x;
-	amplitude = y;
-	phase = p;
+	amp_p = p;
+	amp_s = s;
+	phase = y;
 	wavelength = w;
 	direction = d;
 	layer = 0;
 }
 
-Ray::Ray(double x, double y, double p, double w, bool d, int l) {
+Ray::Ray(double x, double p, double s, double y, double w, bool d, int l) {
 	angle = x;
-	amplitude = y;
-	phase = p;
+	amp_p = p;
+	amp_s = s;
+	phase = y;
 	wavelength = w;
 	direction = d;
 	layer = l;
 }
 
+//deconstructor
 Ray::~Ray() {
 }
 
-double Ray::GetRayAngle() {
+//definition of methods
+double Ray::GetRayAngle() const {
 	return angle;
 }
 
@@ -122,15 +152,23 @@ void Ray::SetRayAngle(double x) {
 	angle = x;
 }
 
-double Ray::GetRayAmplitude() {
-	return amplitude;
+double Ray::GetRayAmp_p() const {
+	return amp_p;
 }
 
-void Ray::SetRayAmplitude(double x) {
-	amplitude = x;
+void Ray::SetRayAmp_p(double x) {
+	amp_p = x;
 }
 
-double Ray::GetRayPhase() {
+double Ray::GetRayAmp_s() const {
+	return amp_s;
+}
+
+void Ray::SetRayAmp_s(double x) {
+	amp_s = x;
+}
+
+double Ray::GetRayPhase() const {
 	return phase;
 }
 
@@ -138,7 +176,7 @@ void Ray::SetRayPhase(double x) {
 	phase = x;
 }
 
-double Ray::GetRayWavelength() {
+double Ray::GetRayWavelength() const {
 	return wavelength;
 }
 
@@ -146,7 +184,7 @@ void Ray::SetRayWavelength(double x) {
 	wavelength = x;
 }
 
-bool Ray::GetRayDirection() {
+bool Ray::GetRayDirection() const {
 	return direction;
 }
 
@@ -154,7 +192,7 @@ void Ray::SetRayDirection(bool x) {
 	direction = x;
 }
 
-int Ray::GetRayLayer() {
+int Ray::GetRayLayer() const {
 	return layer;
 }
 
