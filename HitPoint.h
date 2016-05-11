@@ -16,19 +16,33 @@ public:
 	~HitPoint();
 
 //prototypes
-
-
+private:
+	void ReflectionPhaseShift(Ray&);
 };
 
 //constructor
-HitPoint::HitPoint(Ray rInc, Layer layer, Ray &rRefl, Ray &rRefr) {
+HitPoint::HitPoint(Ray inc, Layer layer, Ray &rRefl, Ray &rRefr) {
 
-	rRefl.SetRayAngle(30.0);
+	rRefl = inc;
+	ReflectionPhaseShift(rRefl);	//phase shift for reflection ray
 }
 
 HitPoint::~HitPoint() {
 }
 
+
 //methods
+
+//phase shift 180deg after reflecion
+//keep the value between 0-2pi
+void HitPoint::ReflectionPhaseShift(Ray& rRay) {
+	if(rRay.GetRayPhase() > MY_PI) {
+		rRay.SetRayPhase(rRay.GetRayPhase() - MY_PI);
+	}
+	else {
+		rRay.SetRayPhase(rRay.GetRayPhase() + MY_PI);
+	}
+}
+
 
 #endif
