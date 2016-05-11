@@ -27,11 +27,15 @@ private:
 //constructor
 HitPoint::HitPoint(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl, Ray& rRefr) {
 
+	//reflection
 	rRefl = rInc;
 
 	rRefl.SetRayDirection(!rInc.GetRayDirection());  	//invers diretion of propagation
 	ReflectionPhaseShift(rRefl);				//phase shift for reflection ray
 	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);	//find the reflectance for p- and s- polarization
+
+	//refraction
+	rRefr = rInc;
 }
 
 HitPoint::~HitPoint() {

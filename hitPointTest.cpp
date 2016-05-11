@@ -30,6 +30,8 @@ public:
 
 };
 
+
+//---- reflection tests ----
 TEST_F(RayHitPoint, ReflectionAngleCheck) {
 	ASSERT_DOUBLE_EQ(refl.GetRayAngle(), inc.GetRayAngle());
 }
@@ -40,7 +42,7 @@ TEST_F(RayHitPoint, ReflectionLayerCheck) {
 
 TEST_F(RayHitPoint, ReflectionWavelength) {
 	ASSERT_DOUBLE_EQ(refl.GetRayWavelength(), inc.GetRayWavelength());
-} 
+}
 
 TEST_F(RayHitPoint, ReflectionPhase) {
 	if(inc.GetRayPhase() > MY_PI) {
@@ -61,7 +63,6 @@ TEST_F(RayHitPoint, ReflectionDirection) {
 	ASSERT_EQ(refl.GetRayDirection(), !inc.GetRayDirection());
 }
 
-//reflectance p-type polarization
 TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p(), 0.0000001);
 }
@@ -72,7 +73,6 @@ TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0252491*inc.GetRayAmp_p(), 0.0000001);
 }
 
-//reflectance s-type polarization
 TEST_F(RayHitPoint, ReflectionAmplitudeS0deg) {
 	ASSERT_NEAR(refl.GetRayAmp_s(), 0.04*inc.GetRayAmp_p(), 0.0000001);
 }
@@ -83,7 +83,20 @@ TEST_F(RayHitPoint, ReflectionAmplitudeS30deg) {
 	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0577961*inc.GetRayAmp_p(), 0.0000001);
 }
 
+//---- end reflection tests ----
 
+//---- refraction tests ----
+TEST_F(RayHitPoint, RefractionDirection) {
+	ASSERT_EQ(refr.GetRayDirection(), inc.GetRayDirection());
+}
+
+TEST_F(RayHitPoint, RefractionWavelength) {
+	ASSERT_DOUBLE_EQ(refr.GetRayWavelength(), inc.GetRayWavelength());
+}
+
+TEST_F(RayHitPoint, RefractionPhase) {
+	ASSERT_DOUBLE_EQ(refr.GetRayPhase(), inc.GetRayPhase());
+}
 
 
 
