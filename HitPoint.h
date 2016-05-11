@@ -50,11 +50,22 @@ void HitPoint::ReflectionPhaseShift(Ray& rRay) {
 void HitPoint::Reflectance(Layer top, Layer bottom, Ray inc, Ray& rR) {
 
 		ComplexNumber cplx;
-		COMPLEX cX = cplx.Mul(bottom.GetRefractiveIndex(), cos(inc.GetRayAngle()*MY_PI/180));
 
-		std::cout << cX.real << std::endl;
-		std::cout << cX.imag << std::endl;
-		rR.SetRayAmp_p(0.04);
+		COMPLEX cX = cplx.Mul(bottom.GetRefractiveIndex(), cos(inc.GetRayAngle()*MY_PI/180));	// n2*cos(theta)
+
+		COMPLEX cY = cplx.Div(top.GetRefractiveIndex(), bottom.GetRefractiveIndex());		// (n1/n2)
+
+		cY = cplx.Mul(cY, sin(inc.GetRayAngle()*MY_PI/180));			// (n1/n2)*sin(theta)
+		cY = cplx.Mul(cY, cY);							// ((n1/n2)*sin(theta))^2
+		cY = cplx.Sqr(cplx.Sub(1.0, cY));					// ( sqrt(1 - ((n1/n2)*sin(theta))^2)
+
+		COMPLEX cZ = cplx.Mul(top.GetRefractiveIndex(), cY);
+
+
+		double rp = cplx.Magnitude(cplx.Div(cplx.Sub(cZ, cX), cplx.Add(cZ, cX)));
+		rp = rp * rp;	//reflectance p- polarization
+
+		rR.SetRayAmp_p(rp);
 }
 
 #endif

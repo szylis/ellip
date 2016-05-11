@@ -62,13 +62,13 @@ TEST_F(RayHitPoint, ReflectionDirection) {
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
-	ASSERT_DOUBLE_EQ(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p());
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
 	HitPoint hitPoint2(air, glass, inc, refl, refr);
-	ASSERT_DOUBLE_EQ(refl.GetRayAmp_p(), 0.025*inc.GetRayAmp_p());
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0252491*inc.GetRayAmp_p(), 0.0000001);
 }
 
 
