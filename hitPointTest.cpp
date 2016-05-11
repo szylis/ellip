@@ -37,7 +37,7 @@ TEST_F(RayHitPoint, ReflectionAngleCheck) {
 }
 
 TEST_F(RayHitPoint, ReflectionLayerCheck) {
-	ASSERT_DOUBLE_EQ(refl.GetRayLayer(), inc.GetRayLayer());
+	ASSERT_EQ(refl.GetRayLayer(), inc.GetRayLayer());
 }
 
 TEST_F(RayHitPoint, ReflectionWavelength) {
@@ -96,6 +96,31 @@ TEST_F(RayHitPoint, RefractionWavelength) {
 
 TEST_F(RayHitPoint, RefractionPhase) {
 	ASSERT_DOUBLE_EQ(refr.GetRayPhase(), inc.GetRayPhase());
+}
+
+TEST_F(RayHitPoint, RefractionLayerCheck) {
+	ASSERT_EQ(refr.GetRayLayer(), inc.GetRayLayer()+1);
+}
+
+
+TEST_F(RayHitPoint, RefractionAmplitudeP0deg) {
+	ASSERT_NEAR(refr.GetRayAmp_p(), 1.0 - 0.04*inc.GetRayAmp_p(), 0.0000001);
+}
+
+TEST_F(RayHitPoint, RefractionAmplitudeP30deg) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_NEAR(refr.GetRayAmp_p(), 1.0 - 0.0252491*inc.GetRayAmp_p(), 0.0000001);
+}
+
+TEST_F(RayHitPoint, RefractionAmplitudeS0deg) {
+	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.04*inc.GetRayAmp_p(), 0.0000001);
+}
+
+TEST_F(RayHitPoint, RefractionAmplitudeS30deg) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.0577961*inc.GetRayAmp_p(), 0.0000001);
 }
 
 

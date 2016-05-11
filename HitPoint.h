@@ -19,7 +19,9 @@ public:
 private:
 	void ReflectionPhaseShift(Ray&);
 	void Reflectance(Layer&, Layer&, Ray&, Ray&);
-	
+
+	void Transmittance(Layer&, Layer&, Ray&, Ray&);
+
 	double FindRp(Layer&, Layer&, Ray&);
 	double FindRs(Layer&, Layer&, Ray&);
 };
@@ -36,6 +38,8 @@ HitPoint::HitPoint(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl,
 
 	//refraction
 	rRefr = rInc;
+	rRefr.SetRayLayer(rInc.GetRayLayer()+1);
+	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
 }
 
 HitPoint::~HitPoint() {
@@ -60,6 +64,12 @@ void HitPoint::Reflectance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
 	rR.SetRayAmp_p(FindRp(rTop, rBottom, rInc));
 	rR.SetRayAmp_s(FindRs(rTop, rBottom, rInc));
 
+}
+
+void HitPoint::Transmittance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
+
+	rR.SetRayAmp_p(1.0 - FindRp(rTop, rBottom, rInc));
+	rR.SetRayAmp_s(1.0 - FindRs(rTop, rBottom, rInc));
 }
 
 double HitPoint::FindRp(Layer& rTop, Layer& rBottom, Ray& rInc) {
