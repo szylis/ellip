@@ -123,6 +123,18 @@ TEST_F(RayHitPoint, RefractionAmplitudeS30deg) {
 	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.0577961*inc.GetRayAmp_p(), 0.0000001);
 }
 
+TEST_F(RayHitPoint, RefrectionAngle0deg) {
+	ASSERT_DOUBLE_EQ(refr.GetRayAngle(), 0.0);
+}
+
+TEST_F(RayHitPoint, RefractionAngle30deg) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_NEAR(refr.GetRayAngle(), 19.4712, 0.0001);
+}
+
+//---- end refraction tests ----
+
 
 
 

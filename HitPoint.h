@@ -20,6 +20,7 @@ private:
 	void ReflectionPhaseShift(Ray&);
 	void Reflectance(Layer&, Layer&, Ray&, Ray&);
 
+	void RefractionAngle(Layer&, Layer&, Ray&, Ray&);
 	void Transmittance(Layer&, Layer&, Ray&, Ray&);
 
 	double FindRp(Layer&, Layer&, Ray&);
@@ -39,6 +40,7 @@ HitPoint::HitPoint(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl,
 	//refraction
 	rRefr = rInc;
 	rRefr.SetRayLayer(rInc.GetRayLayer()+1);
+	RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
 	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
 }
 
@@ -57,6 +59,16 @@ void HitPoint::ReflectionPhaseShift(Ray& rRay) {
 	else {
 		rRay.SetRayPhase(rRay.GetRayPhase() + MY_PI);
 	}
+}
+
+void HitPoint::RefractionAngle(Layer& rT, Layer& rB, Ray& rI, Ray& rR) {
+
+	ComplexNumber cplx;
+
+	COMPLEX cX = cplx.Div(rT.GetRefractiveIndex(), rB.GetRefractiveIndex());
+	cX = cplx.Mul(cX, sin(rI.GetRayAngle()*MY_PI/180));
+	
+	rR.SetRayAngle(asin(cX.real)*180/MY_PI);
 }
 
 void HitPoint::Reflectance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
