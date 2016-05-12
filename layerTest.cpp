@@ -12,7 +12,7 @@ public:
 
 TEST_F(OpticLayer, GetRefractiveIndex) {
 
-	Layer glass({1.45, 0.0}, 1, 0.2);
+	Layer glass(1, {1.45, 0.0}, 0.2);
 
 	ASSERT_DOUBLE_EQ(glass.GetRefractiveIndex().real, 1.45);
 	ASSERT_DOUBLE_EQ(glass.GetRefractiveIndex().imag, 0.0);
@@ -28,7 +28,7 @@ TEST_F(OpticLayer, SetRefractiveIndex) {
 
 TEST_F(OpticLayer, GetPositionNumber) {
 
-	Layer glass({1.45, 0.0}, 3, 0.4);
+	Layer glass(3, {1.45, 0.0}, 0.4);
 	ASSERT_EQ(glass.GetPosition(), 3);
 }
 
@@ -40,7 +40,7 @@ TEST_F(OpticLayer, SetPositionNumber) {
 
 TEST_F(OpticLayer, GetThickness) {
 
-	Layer glass({1.45, 0.0}, 2, 0.2);
+	Layer glass(2, {1.45, 0.0}, 0.2);
 
 	ASSERT_DOUBLE_EQ(glass.GetThickness(), 0.2);
 }

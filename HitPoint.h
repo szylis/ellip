@@ -67,8 +67,14 @@ void HitPoint::RefractionAngle(Layer& rT, Layer& rB, Ray& rI, Ray& rR) {
 
 	COMPLEX cX = cplx.Div(rT.GetRefractiveIndex(), rB.GetRefractiveIndex());
 	cX = cplx.Mul(cX, sin(rI.GetRayAngle()*MY_PI/180));
-	
-	rR.SetRayAngle(asin(cX.real)*180/MY_PI);
+
+	//when the total internal reflection
+	if(cX.real > 1.0) {
+		rR.SetRayAngle(90.0);
+	}
+	else {
+		rR.SetRayAngle(asin(cX.real)*180/MY_PI);
+	}
 }
 
 void HitPoint::Reflectance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {

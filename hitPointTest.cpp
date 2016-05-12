@@ -17,7 +17,7 @@ public:
 	Ray refr;
 
 //construtor:
-	RayHitPoint(): air({1.0, 0.0}, 0.0), glass({1.5, 0.0}, 0.2),
+	RayHitPoint(): air(0, {1.0, 0.0}, 0.0), glass(1, {1.5, 0.0}, 0.2),
 			inc(0.0, 1.0, 1.0, 0.0, 0.632, true, 0),
 			refl(), refr() {
 
@@ -135,6 +135,45 @@ TEST_F(RayHitPoint, RefractionAngle30deg) {
 
 //---- end refraction tests ----
 
+//Brewster's Angle
+TEST_F(RayHitPoint, BrewstersAngle) {
+	inc.SetRayAngle(56.3);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.147861, 0.000001);
+}
 
+//Light travles from glass to air (Total Internal Refrlection)
+TEST_F(RayHitPoint, FromGlassToAirAngle20deg) {
+	inc.SetRayAngle(20.0);
+	glass.SetPosition(0);
+	air.SetPosition(1);
+	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	ASSERT_NEAR(refl.GetRayAngle(), 20.0, 0.01);
+	ASSERT_NEAR(refr.GetRayAngle(), 30.86, 0.01);
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0243938, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0590632, 0.0000001);
+}
 
+TEST_F(RayHitPoint, FromGlassToAirBrewstersAngle) {
+	inc.SetRayAngle(33.69);
+	glass.SetPosition(0);
+	air.SetPosition(1);
+	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	ASSERT_NEAR(refl.GetRayAngle(), 33.69, 0.01);
+	ASSERT_NEAR(refr.GetRayAngle(), 56.30, 0.01);
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.147928, 0.0000001);
+}
+
+TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
+	inc.SetRayAngle(50.0);
+	glass.SetPosition(0);
+	air.SetPosition(1);
+	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	ASSERT_NEAR(refl.GetRayAngle(), 50.0, 0.01);
+	ASSERT_NEAR(refr.GetRayAngle(), 90.0, 0.01);
+	ASSERT_NEAR(refl.GetRayAmp_p(), 1.0, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), 1.0, 0.0000001);
+}
 

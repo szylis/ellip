@@ -23,9 +23,9 @@ public:
 
 //constructors
 	Layer();
-	Layer(COMPLEX);
-	Layer(COMPLEX, int);
-	Layer(COMPLEX, int, double);
+	Layer(int);
+	Layer(int, COMPLEX);
+	Layer(int, COMPLEX, double);
 	~Layer();
 
 //prototypes
@@ -49,26 +49,26 @@ private:
 
 //definition of layer constructors
 Layer::Layer() {
-	refractiveIndex = {1.0, 0.0};
-	position = 0; 
-	thickness = 0.0;
-}
-
-Layer::Layer(COMPLEX x) {
-	refractiveIndex = x;
 	position = 0;
+	refractiveIndex = {1.0, 0.0};
 	thickness = 0.0;
 }
 
-Layer::Layer(COMPLEX x, int y) {
-	refractiveIndex = x;
-	position = y;
+Layer::Layer(int x) {
+	position = x;
+	refractiveIndex = {1.0, 0.0};
 	thickness = 0.0;
 }
 
-Layer::Layer(COMPLEX x, int y, double z) {
-	refractiveIndex = x;
-	position = y;
+Layer::Layer(int x, COMPLEX y) {
+	position = x;
+	refractiveIndex = y;
+	thickness = 0.0;
+}
+
+Layer::Layer(int x, COMPLEX y, double z) {
+	position = x;
+	refractiveIndex = y;
 	thickness = z;
 }
 
