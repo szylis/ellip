@@ -1,16 +1,15 @@
-//-------------------------------------------------------------------------------------------------------
-//
-// Class holding the physical layer object
-//
-// Layer is characterized by:
-//	- complex refractive index
-//	- thickness
-//	- position number (counting from the top (air -> substrate),
-//		where layer number 0 is assumed to be air)
-// 
-// Author: Szymon Lis	twitter: @drSzymonLis	email: szymonlis@yahoo.com
-//
-//-----------------------------------------------------------------------------------------------------
+/* Copyright (C) 2016 Szymon Lis			email: szymonlis@yahoo.com
+ *							twitter: @drSzymonLis
+ *
+ * Class holding the physical layer object
+ *
+ * Layer is characterized by:
+ *	- complex refractive index
+ *	- thickness
+ *	- position number (counting from the top (air -> substrate),
+ *		where layer number 0 is assumed to be air)
+ * 
+ */
 
 #ifndef Layer_h
 #define Layer_h

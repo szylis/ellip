@@ -7,6 +7,13 @@ GMOCK_DIR="/home/szymon/TDD/googlemock"
 
 
 #run compiler
-g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread mainTest.cpp hitPointTest.cpp lib/libgmock.a -o testUnit -lm
 
-#g++ -std=c++11 -pthread main.cpp -o ellip 
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread mainTest.cpp complexTest.cpp lib/libgmock.a -o complexTest -lm
+
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread mainTest.cpp rayTest.cpp lib/libgmock.a -o rayTest -lm
+
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread mainTest.cpp layerTest.cpp lib/libgmock.a -o layerTest -lm
+
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread mainTest.cpp hitPointTest.cpp lib/libgmock.a -o hitPointTest -lm
+
+g++ -std=c++11 -pthread main.cpp -o ellip 

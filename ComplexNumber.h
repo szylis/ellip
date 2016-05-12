@@ -1,3 +1,11 @@
+/* Copyright (C) 2016 Szymon Lis		email: szymonlis@yahoo.com
+ *						Twitter: @drSzymonLis
+ *
+ * This class is designed to solve complex number arithmetics
+ *
+ */ 
+ 
+
 #ifndef ComplexNumber_h
 #define ComplexNumber_h
 

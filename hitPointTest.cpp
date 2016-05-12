@@ -15,13 +15,14 @@ public:
 	Ray inc;
 	Ray refl;
 	Ray refr;
+	HitPoint hitPoint;
 
 //construtor:
 	RayHitPoint(): air(0, {1.0, 0.0}, 0.0), glass(1, {1.5, 0.0}, 0.2),
 			inc(0.0, 1.0, 1.0, 0.0, 0.632, true, 0),
 			refl(), refr() {
 
-		HitPoint hitPoint(air, glass, inc, refl, refr);
+		hitPoint.Solve(air, glass, inc, refl, refr);
 	};
 
 //deconstructor:
@@ -30,6 +31,13 @@ public:
 
 };
 
+
+//constructor test
+TEST_F(RayHitPoint, ConstructorAllArgs) {
+	inc.SetRayAngle(30.0);
+	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	ASSERT_DOUBLE_EQ(refl.GetRayAngle(), inc.GetRayAngle());
+}
 
 //---- reflection tests ----
 TEST_F(RayHitPoint, ReflectionAngleCheck) {
@@ -51,7 +59,7 @@ TEST_F(RayHitPoint, ReflectionPhase) {
 		ASSERT_DOUBLE_EQ(refl.GetRayPhase(), inc.GetRayPhase() + MY_PI); }
 
 	inc.SetRayPhase(MY_PI*1.4);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 
 	if(inc.GetRayPhase() > MY_PI) {
 		ASSERT_DOUBLE_EQ(refl.GetRayPhase(), inc.GetRayPhase() - MY_PI); }
@@ -69,7 +77,7 @@ TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
 
 TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0252491*inc.GetRayAmp_p(), 0.0000001);
 }
 
@@ -79,7 +87,7 @@ TEST_F(RayHitPoint, ReflectionAmplitudeS0deg) {
 
 TEST_F(RayHitPoint, ReflectionAmplitudeS30deg) {
 	inc.SetRayAngle(30.0);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0577961*inc.GetRayAmp_p(), 0.0000001);
 }
 
@@ -109,7 +117,7 @@ TEST_F(RayHitPoint, RefractionAmplitudeP0deg) {
 
 TEST_F(RayHitPoint, RefractionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refr.GetRayAmp_p(), 1.0 - 0.0252491*inc.GetRayAmp_p(), 0.0000001);
 }
 
@@ -119,7 +127,7 @@ TEST_F(RayHitPoint, RefractionAmplitudeS0deg) {
 
 TEST_F(RayHitPoint, RefractionAmplitudeS30deg) {
 	inc.SetRayAngle(30.0);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.0577961*inc.GetRayAmp_p(), 0.0000001);
 }
 
@@ -129,7 +137,7 @@ TEST_F(RayHitPoint, RefrectionAngle0deg) {
 
 TEST_F(RayHitPoint, RefractionAngle30deg) {
 	inc.SetRayAngle(30.0);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refr.GetRayAngle(), 19.4712, 0.0001);
 }
 
@@ -138,7 +146,7 @@ TEST_F(RayHitPoint, RefractionAngle30deg) {
 //Brewster's Angle
 TEST_F(RayHitPoint, BrewstersAngle) {
 	inc.SetRayAngle(56.3);
-	HitPoint hitPoint2(air, glass, inc, refl, refr);
+	hitPoint.Solve(air, glass, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.000001);
 	ASSERT_NEAR(refl.GetRayAmp_s(), 0.147861, 0.000001);
 }
@@ -148,7 +156,7 @@ TEST_F(RayHitPoint, FromGlassToAirAngle20deg) {
 	inc.SetRayAngle(20.0);
 	glass.SetPosition(0);
 	air.SetPosition(1);
-	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 20.0, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 30.86, 0.01);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0243938, 0.0000001);
@@ -159,7 +167,7 @@ TEST_F(RayHitPoint, FromGlassToAirBrewstersAngle) {
 	inc.SetRayAngle(33.69);
 	glass.SetPosition(0);
 	air.SetPosition(1);
-	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 33.69, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 56.30, 0.01);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.0000001);
@@ -170,7 +178,7 @@ TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
 	inc.SetRayAngle(50.0);
 	glass.SetPosition(0);
 	air.SetPosition(1);
-	HitPoint hitPoint2(glass, air, inc, refl, refr);
+	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 50.0, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 90.0, 0.01);
 	ASSERT_NEAR(refl.GetRayAmp_p(), 1.0, 0.0000001);

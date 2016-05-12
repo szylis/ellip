@@ -1,21 +1,38 @@
+/* Copyright (C) 2016 Szymon Lis	email: szymonlis@yahoo.com
+ * 					twitter: @drSzymonLis
+ *
+ * This class is designed to solve the Fresnel equation at two mediums interface
+ *
+ * To solve equations run the SOLVE public method, the necessary list of argument include:
+ *	- Layer - reference to Layer class holding material where from light is coming
+ *	- Layer - reference to Layer class holding material where the light is traveling
+ *	- Ray - reference to Ray class holding the incident light beam
+ *	- Ray - reference to Ray class holding the reflected light beam
+ *	- Ray - reference to Ray class holding the refracted light beam
+ *
+ */
+
 #ifndef HitPoint_h
 #define HitPoint_h
-
 
 #include "ComplexNumber.h"
 #include "Layer.h"
 #include "Ray.h"
 #include <iostream>
 
+
 class HitPoint {
 
-public:
-
 //constructor
+public:
+	HitPoint();
 	HitPoint(Layer&, Layer&, Ray&, Ray&, Ray&);
 	~HitPoint();
 
 //prototypes
+public:
+	void Solve(Layer&, Layer&, Ray&, Ray&, Ray&);
+
 private:
 	void ReflectionPhaseShift(Ray&);
 	void Reflectance(Layer&, Layer&, Ray&, Ray&);
@@ -28,20 +45,12 @@ private:
 };
 
 //constructor
+HitPoint::HitPoint() {
+}
+
 HitPoint::HitPoint(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl, Ray& rRefr) {
 
-	//reflection
-	rRefl = rInc;
-
-	rRefl.SetRayDirection(!rInc.GetRayDirection());  	//invers diretion of propagation
-	ReflectionPhaseShift(rRefl);				//phase shift for reflection ray
-	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);	//find the reflectance for p- and s- polarization
-
-	//refraction
-	rRefr = rInc;
-	rRefr.SetRayLayer(rInc.GetRayLayer()+1);
-	RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
-	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
+	Solve(rTopLayer, rBottomLayer, rInc, rRefl, rRefr);
 }
 
 HitPoint::~HitPoint() {
@@ -124,6 +133,22 @@ double HitPoint::FindRs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	//reflectance s- polarization
 	double rs = cplx.Magnitude(cplx.Div(cplx.Sub(cYs, cZs), cplx.Add(cYs, cZs)));
 	return rs * rs;
+}
+
+void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl, Ray& rRefr) {
+
+	//reflection
+	rRefl = rInc;
+
+	rRefl.SetRayDirection(!rInc.GetRayDirection());  	//invers diretion of propagation
+	ReflectionPhaseShift(rRefl);				//phase shift for reflection ray
+	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);	//find the reflectance for p- and s- polarization
+
+	//refraction
+	rRefr = rInc;
+	rRefr.SetRayLayer(rInc.GetRayLayer()+1);
+	RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
+	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
 }
 
 

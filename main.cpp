@@ -21,10 +21,17 @@ int main()
 	Ray tran;
 
 	//interface
-	HitPoint hit(air, glass, laser, refl, tran);
+	HitPoint hit;
 
 	printf("Angle:\tRp:\tRs:\t\n");
-	printf("%.5f %.5f %.5f\n", laser.GetRayAngle(), refl.GetRayAmp_p(), refl.GetRayAmp_p());
+
+
+	for(unsigned int i=0; i < 15; i++) 
+	{
+		laser.SetRayAngle(5.0*i);
+		hit.Solve(air, glass, laser, refl, tran);
+		printf("%.5f %.5f %.5f\n", laser.GetRayAngle(), refl.GetRayAmp_p(), refl.GetRayAmp_s());
+	}
 
 	return 0;
 }

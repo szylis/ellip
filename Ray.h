@@ -1,18 +1,18 @@
-//---------------------------------------------------------------------------------
-//
-// Class holding the light ray object
-//
-// Ray is characterised by:
-//	- angle of ray propagation in reference to layer stack normal
-//	- amp_p amplitude of 'p' type polarization
-//	- amp_s amplitude of 's' type polarization
-//	- phase of the ray [rad]
-//	- wavelength of the ray [um]
-//	- direction (true: for transmission towards substrate; false: towards air)
-//	- layer where ray is at particular moment
-//
-// Author: Szymon Lis	twitter: @drSzymonLis	email: szymonlis@yahoo.com
-//---------------------------------------------------------------------------------
+/* Copyright (C) 2016 Szymon Lis			email: szymonlis@yahoo.com
+ *							twitter: @drSzymonLis
+ *
+ * Class holding the light ray object
+ *
+ * Ray is characterised by:
+ *	- angle of ray propagation in reference to layer stack normal
+ *	- amp_p amplitude of 'p' type polarization
+ *	- amp_s amplitude of 's' type polarization
+ *	- phase of the ray [rad]
+ *	- wavelength of the ray [um]
+ *	- direction (true: for transmission towards substrate; false: towards air)
+ *	- layer where ray is at particular moment
+ *
+ */
 
 #ifndef Ray_h
 #define Ray_h
