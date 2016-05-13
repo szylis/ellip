@@ -18,7 +18,6 @@
 #include "ComplexNumber.h"
 #include "Layer.h"
 #include "Ray.h"
-#include <iostream>
 
 
 class HitPoint {
