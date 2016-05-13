@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
-#include "ComplexNumber.h"
-#include "HitPoint.h"
-#include "Ray.h"
-#include "Layer.h"
+#include "../ComplexNumber.h"
+#include "../HitPoint.h"
+#include "../Ray.h"
+#include "../Layer.h"
 
 using namespace testing;
 

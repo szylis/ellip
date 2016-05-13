@@ -1,0 +1,30 @@
+
+#!/bin/bash
+
+#path to directories
+GTEST_DIR="/home/szymon/TDD/googletest"
+GMOCK_DIR="/home/szymon/TDD/googlemock"
+SRC_DIR="../src"
+LIB_DIR="../lib"
+BIN_DIR="../bin"
+
+
+#run compiler
+
+#comlex numeber class test
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/complexTest.cpp ${LIB_DIR}/libgmock.a -o complexTest -lm
+
+#ray class test
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/rayTest.cpp ${LIB_DIR}/libgmock.a -o rayTest -lm
+
+#layer class test
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/layerTest.cpp ${LIB_DIR}/libgmock.a -o layerTest -lm
+
+#hit point class test
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/hitPointTest.cpp ${LIB_DIR}/libgmock.a -o hitPointTest -lm
+
+#stack class test
+g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/stackTest.cpp ${LIB_DIR}/libgmock.a -o stackTest -lm
+
+#user interface
+#g++ -std=c++11 -pthread ${SRC_DIR}/main.cpp -o ellip 

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "ComplexNumber.h"
-#include "Ray.h"
+#include "../ComplexNumber.h"
+#include "../Ray.h"
 
 using namespace testing;
 

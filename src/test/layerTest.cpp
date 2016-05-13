@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "ComplexNumber.h"
-#include "Layer.h"
+#include "../ComplexNumber.h"
+#include "../Layer.h"
 
 using namespace testing;
 
