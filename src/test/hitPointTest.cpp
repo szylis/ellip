@@ -102,9 +102,18 @@ TEST_F(RayHitPoint, RefractionWavelength) {
 	ASSERT_DOUBLE_EQ(refr.GetRayWavelength(), inc.GetRayWavelength());
 }
 
-TEST_F(RayHitPoint, RefractionPhase) {
-	ASSERT_DOUBLE_EQ(refr.GetRayPhase(), inc.GetRayPhase());
+TEST_F(RayHitPoint, RefractionPhaseChange0deg) {
+	ASSERT_NEAR(refr.GetRayPhase(), 2*MY_PI*glass.GetThickness()/0.421333, 0.0001);
 }
+
+////
+TEST_F(RayHitPoint, RefractionPhaseChange30deg) {
+	inc.SetRayAngle(30.0);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+	double x = asin(0.5/glass.GetRefractiveIndex().real);
+	ASSERT_NEAR(refr.GetRayPhase(), 2*MY_PI*(0.2/cos(x))/0.421333, 0.001);
+}
+
 
 TEST_F(RayHitPoint, RefractionLayerCheck) {
 	ASSERT_EQ(refr.GetRayLayer(), inc.GetRayLayer()+1);
@@ -184,4 +193,3 @@ TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
 	ASSERT_NEAR(refl.GetRayAmp_p(), 1.0, 0.0000001);
 	ASSERT_NEAR(refl.GetRayAmp_s(), 1.0, 0.0000001);
 }
-

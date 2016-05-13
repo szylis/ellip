@@ -19,6 +19,7 @@
 #include "Layer.h"
 #include "Ray.h"
 
+#include <iostream>
 
 class HitPoint {
 
@@ -39,6 +40,8 @@ private:
 	void RefractionAngle(Layer&, Layer&, Ray&, Ray&);
 	void Transmittance(Layer&, Layer&, Ray&, Ray&);
 
+	void AlterPhase(Layer&, Ray&);
+
 	double FindRp(Layer&, Layer&, Ray&);
 	double FindRs(Layer&, Layer&, Ray&);
 };
@@ -56,7 +59,51 @@ HitPoint::~HitPoint() {
 }
 
 
-//methods
+//public method
+
+//method for solving the hit point
+void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl, Ray& rRefr) {
+
+// --- reflection ---
+//1) reflection angle, wavelength, layer position -> the same as incidence
+	rRefl = rInc;
+
+//2) invers direction of propagation
+	rRefl.SetRayDirection(!rInc.GetRayDirection());
+
+//3) shift phase by 180deg
+	ReflectionPhaseShift(rRefl);
+
+//4) calculate phase for new reflected beam
+	AlterPhase(rTopLayer, rRefl);
+
+//5) find the reflectance for p- and s- type polarization
+	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);
+
+
+// --- refraction ---
+//1) wavelength the same as incidence
+	rRefr = rInc;
+
+//2) change the postion of ray
+	if(rRefr.GetRayDirection()) {
+		rRefr.SetRayLayer(rInc.GetRayLayer()+1);
+	}
+	else {
+		rRefr.SetRayLayer(rInc.GetRayLayer()-1);
+	}
+
+//3) find refraction angle
+	RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
+
+//4) change phase according to thickness of the layer
+	AlterPhase(rBottomLayer, rRefr);
+
+//5) find the amplitude of the ray for p- and s- type of polarization
+	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
+}
+
+//private methods
 
 //phase shift 180deg after reflecion
 //keep the value between 0-2pi
@@ -68,6 +115,15 @@ void HitPoint::ReflectionPhaseShift(Ray& rRay) {
 		rRay.SetRayPhase(rRay.GetRayPhase() + MY_PI);
 	}
 }
+
+void HitPoint::AlterPhase(Layer& rLayer, Ray& rRay) {
+
+	double x = rLayer.GetThickness()/cos(rRay.GetRayAngle()*MY_PI/180);
+	double kVector = 2*MY_PI*rLayer.GetRefractiveIndex().real/rRay.GetRayWavelength();
+
+	rRay.SetRayPhase(kVector * x + rRay.GetRayPhase());
+}
+
 
 void HitPoint::RefractionAngle(Layer& rT, Layer& rB, Ray& rI, Ray& rR) {
 
@@ -132,22 +188,6 @@ double HitPoint::FindRs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	//reflectance s- polarization
 	double rs = cplx.Magnitude(cplx.Div(cplx.Sub(cYs, cZs), cplx.Add(cYs, cZs)));
 	return rs * rs;
-}
-
-void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRefl, Ray& rRefr) {
-
-	//reflection
-	rRefl = rInc;
-
-	rRefl.SetRayDirection(!rInc.GetRayDirection());  	//invers diretion of propagation
-	ReflectionPhaseShift(rRefl);				//phase shift for reflection ray
-	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);	//find the reflectance for p- and s- polarization
-
-	//refraction
-	rRefr = rInc;
-	rRefr.SetRayLayer(rInc.GetRayLayer()+1);
-	RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
-	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
 }
 
 

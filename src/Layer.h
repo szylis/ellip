@@ -69,6 +69,7 @@ Layer::Layer(int x, COMPLEX y, double z) {
 	position = x;
 	refractiveIndex = y;
 	thickness = z;
+	if(position==0) { thickness=0.0; }	//keep the top layer on some 0.0 thickness
 }
 
 //deconstructor
@@ -99,6 +100,7 @@ double Layer::GetThickness() const {
 
 void Layer::SetThickness(double x) {
 	thickness = x;
+	if(position==0) { thickness = 0.0; }	//to keep uniform thickness of top layer 
 }
 
 
