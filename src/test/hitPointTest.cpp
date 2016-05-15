@@ -193,3 +193,122 @@ TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
 	ASSERT_NEAR(refl.GetRayAmp_p(), 1.0, 0.0000001);
 	ASSERT_NEAR(refl.GetRayAmp_s(), 1.0, 0.0000001);
 }
+
+//ray is travelling backwards
+TEST_F(RayHitPoint, BackwardRayRefrRayDirection) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_FALSE(refr.GetRayDirection());
+}
+
+TEST_F(RayHitPoint, BackwardRayReflRayDirection) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_TRUE(refl.GetRayDirection());
+}
+
+TEST_F(RayHitPoint, BackwardRayRefrRayLayer) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_THAT(refr.GetRayLayer(), inc.GetRayLayer()-1);
+}
+
+
+TEST_F(RayHitPoint, BackwardRayReflRayLayer) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_THAT(refl.GetRayLayer(), inc.GetRayLayer());
+}
+
+TEST_F(RayHitPoint, BackwardRayWavelength) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_THAT(refl.GetRayWavelength(), inc.GetRayWavelength());
+	ASSERT_THAT(refr.GetRayWavelength(), inc.GetRayWavelength());
+}
+
+TEST_F(RayHitPoint, BackwardRayReflAngle) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	ASSERT_THAT(refl.GetRayAngle(), inc.GetRayAngle());
+}
+
+TEST_F(RayHitPoint, BackwardRayRefractionAngleTest) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(air, glass, inc, refl, refr);
+
+	double b = asin((glass.GetRefractiveIndex().real/air.GetRefractiveIndex().real)*(sin(inc.GetRayAngle() * MY_PI/180)));
+	ASSERT_THAT(refr.GetRayAngle(), b*180/MY_PI);
+}
+
+
+TEST_F(RayHitPoint, BackwardRayRefractionPhase) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	inc.SetRayPhase(0.0);
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+
+	hitPoint.Solve(glass, TiO2, inc, refl, refr);
+
+	double kvec = (2*MY_PI)/(inc.GetRayWavelength()/glass.GetRefractiveIndex().real);
+	double x = glass.GetThickness()/cos(refr.GetRayAngle()*MY_PI/180);
+
+	ASSERT_THAT(refr.GetRayPhase(), kvec*x);
+}
+
+
+TEST_F(RayHitPoint, BackwardRayReflectionPhase) {
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	inc.SetRayPhase(0.0);
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+
+	hitPoint.Solve(glass, TiO2, inc, refl, refr);
+
+	double kvec = (2*MY_PI)/(inc.GetRayWavelength()/TiO2.GetRefractiveIndex().real);
+	double x = TiO2.GetThickness()/cos(refl.GetRayAngle()*MY_PI/180);
+
+	ASSERT_NEAR(refl.GetRayPhase(), kvec*x+MY_PI, 0.001);
+}
+
+/*
+
+TEST_F(RayHitPoint, BackwardRayRefractionPhaseNotAir) {
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+	glass.SetPosition(1);
+	inc.SetRayAngle(30.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	hitPoint.Solve(glass, TiO2, inc, refl, refr);
+
+	double x = glass.GetThickness()/cos( asin(0.5*(TiO2.GetRefractiveIndex().real/glass.GetRefractiveIndex().real)) );
+
+	ASSERT_THAT(refr.GetRayPhase(), 2*MY_PI*x/0.4213333);
+}
+
+*/
