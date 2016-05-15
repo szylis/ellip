@@ -84,7 +84,12 @@ void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRef
 	}
 
 //5) find the reflectance for p- and s- type polarization
-	Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);
+	if(rInc.GetRayDirection()) {
+		Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);
+	}
+	else {
+		Reflectance(rBottomLayer, rTopLayer, rInc, rRefl);
+	}
 
 
 // --- refraction ---
@@ -112,7 +117,12 @@ void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRef
 	}
 
 //5) find the amplitude of the ray for p- and s- type of polarization
-	Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
+	if(rInc.GetRayDirection()) {
+		Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
+	}
+	else {
+		Transmittance(rBottomLayer, rTopLayer, rInc, rRefr);
+	}
 }
 
 //private methods

@@ -295,20 +295,46 @@ TEST_F(RayHitPoint, BackwardRayReflectionPhase) {
 	ASSERT_NEAR(refl.GetRayPhase(), kvec*x+MY_PI, 0.001);
 }
 
-/*
-
-TEST_F(RayHitPoint, BackwardRayRefractionPhaseNotAir) {
-
-	Layer TiO2(2, {2.4, 0.0}, 1.0);
-	glass.SetPosition(1);
-	inc.SetRayAngle(30.0);
+TEST_F(RayHitPoint, BackwardRayReflectancePpolarization) {
+	inc.SetRayAngle(25.0);
 	inc.SetRayLayer(1);
 	inc.SetRayDirection(false);
+	inc.SetRayPhase(0.0);
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
-	double x = glass.GetThickness()/cos( asin(0.5*(TiO2.GetRefractiveIndex().real/glass.GetRefractiveIndex().real)) );
+	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0170747, 0.0000001);
 
-	ASSERT_THAT(refr.GetRayPhase(), 2*MY_PI*x/0.4213333);
 }
 
-*/
+TEST_F(RayHitPoint, BackwardRayReflectanceSpolarization) {
+	inc.SetRayAngle(25.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	inc.SetRayPhase(0.0);
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+
+	hitPoint.Solve(glass, TiO2, inc, refl, refr);
+
+	ASSERT_NEAR(refl.GetRayAmp_s(), 0.106413, 0.000001);
+
+}
+
+TEST_F(RayHitPoint, BackwardRayTransmittanceBothPolarization) {
+	inc.SetRayAngle(25.0);
+	inc.SetRayLayer(1);
+	inc.SetRayDirection(false);
+	inc.SetRayPhase(0.0);
+
+	Layer TiO2(2, {2.4, 0.0}, 1.0);
+
+	hitPoint.Solve(glass, TiO2, inc, refl, refr);
+
+	ASSERT_NEAR(refr.GetRayAmp_p(), 1-0.017074, 0.000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), 1-0.106413, 0.000001);
+}
+
+
