@@ -72,23 +72,23 @@ TEST_F(RayHitPoint, ReflectionDirection) {
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeP0deg) {
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.04*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.04)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0252491*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.0252491)*inc.GetRayAmp_p(), 0.000001);
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeS0deg) {
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.04*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.04)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, ReflectionAmplitudeS30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0577961*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.0577961)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 //---- end reflection tests ----
@@ -106,7 +106,7 @@ TEST_F(RayHitPoint, RefractionPhaseChange0deg) {
 	ASSERT_NEAR(refr.GetRayPhase(), 2*MY_PI*glass.GetThickness()/0.421333, 0.0001);
 }
 
-////
+
 TEST_F(RayHitPoint, RefractionPhaseChange30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
@@ -121,23 +121,23 @@ TEST_F(RayHitPoint, RefractionLayerCheck) {
 
 
 TEST_F(RayHitPoint, RefractionAmplitudeP0deg) {
-	ASSERT_NEAR(refr.GetRayAmp_p(), 1.0 - 0.04*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1.0 - 0.04)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refr.GetRayAmp_p(), 1.0 - 0.0252491*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1.0 - 0.0252491)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeS0deg) {
-	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.04*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1.0 - 0.04)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeS30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refr.GetRayAmp_s(), 1.0 - 0.0577961*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1.0 - 0.0577961)*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefrectionAngle0deg) {
@@ -152,12 +152,13 @@ TEST_F(RayHitPoint, RefractionAngle30deg) {
 
 //---- end refraction tests ----
 
+
 //Brewster's Angle
 TEST_F(RayHitPoint, BrewstersAngle) {
 	inc.SetRayAngle(56.3);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.000001);
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.147861, 0.000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.0), 0.001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.147861), 0.000001);
 }
 
 //Light travles from glass to air (Total Internal Refrlection)
@@ -168,8 +169,8 @@ TEST_F(RayHitPoint, FromGlassToAirAngle20deg) {
 	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 20.0, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 30.86, 0.01);
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0243938, 0.0000001);
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.0590632, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.0243938), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.0590632), 0.0000001);
 }
 
 TEST_F(RayHitPoint, FromGlassToAirBrewstersAngle) {
@@ -179,8 +180,8 @@ TEST_F(RayHitPoint, FromGlassToAirBrewstersAngle) {
 	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 33.69, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 56.30, 0.01);
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0, 0.0000001);
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.147928, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.0), 0.001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.147928), 0.0000001);
 }
 
 TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
@@ -190,8 +191,8 @@ TEST_F(RayHitPoint, FromGlassToAirAngle50deg) {
 	hitPoint.Solve(glass, air, inc, refl, refr);
 	ASSERT_NEAR(refl.GetRayAngle(), 50.0, 0.01);
 	ASSERT_NEAR(refr.GetRayAngle(), 90.0, 0.01);
-	ASSERT_NEAR(refl.GetRayAmp_p(), 1.0, 0.0000001);
-	ASSERT_NEAR(refl.GetRayAmp_s(), 1.0, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(1.0), 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(1.0), 0.0000001);
 }
 
 //ray is travelling backwards
@@ -295,6 +296,7 @@ TEST_F(RayHitPoint, BackwardRayReflectionPhase) {
 	ASSERT_NEAR(refl.GetRayPhase(), kvec*x+MY_PI, 0.001);
 }
 
+
 TEST_F(RayHitPoint, BackwardRayReflectancePpolarization) {
 	inc.SetRayAngle(25.0);
 	inc.SetRayLayer(1);
@@ -305,7 +307,7 @@ TEST_F(RayHitPoint, BackwardRayReflectancePpolarization) {
 
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
-	ASSERT_NEAR(refl.GetRayAmp_p(), 0.0170747, 0.0000001);
+	ASSERT_NEAR(refl.GetRayAmp_p(), sqrt(0.0170747), 0.0000001);
 
 }
 
@@ -319,7 +321,7 @@ TEST_F(RayHitPoint, BackwardRayReflectanceSpolarization) {
 
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
-	ASSERT_NEAR(refl.GetRayAmp_s(), 0.106413, 0.000001);
+	ASSERT_NEAR(refl.GetRayAmp_s(), sqrt(0.106413), 0.000001);
 
 }
 
@@ -333,8 +335,7 @@ TEST_F(RayHitPoint, BackwardRayTransmittanceBothPolarization) {
 
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
-	ASSERT_NEAR(refr.GetRayAmp_p(), 1-0.017074, 0.000001);
-	ASSERT_NEAR(refr.GetRayAmp_s(), 1-0.106413, 0.000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1-0.017074), 0.000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1-0.106413), 0.000001);
 }
-
 

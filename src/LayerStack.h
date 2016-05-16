@@ -23,7 +23,6 @@ class LayerStack {
 //constructor
 public:
 	LayerStack();
-	LayerStack(unsigned int);
 	~LayerStack();
 
 //methods:
@@ -36,10 +35,6 @@ public:
 //constructor
 LayerStack::LayerStack() {
 }
-
-LayerStack::LayerStack(unsigned int m) {
-	cout << m << endl;
-} 
 
 LayerStack::~LayerStack() {
 }
@@ -54,7 +49,7 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 	ptr_vector<Ray> vTran;		//vector with all transmitted beams
 	ptr_vector<Ray> vRefl;		//vector with reflected beam used to find Rp and Rs
 
-	vTran.push_back(new Ray{rIn});	//first elemnt is the incidence laser beam 
+	vTran.push_back(new Ray{rIn});	//first elemnt is the incidence laser beam
 
 	Ray tRefl;		//temporary Ray object
 	Ray tTran;		//temporary Ray object
@@ -74,8 +69,45 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 		vRefl.push_back(new Ray{tRefl});	//add reflected beam
 	}
 
-	rRp = vRefl[0].GetRayAmp_p();
-	rRs = vRefl[0].GetRayAmp_s();
+
+	//Backwards rays need to be transmitted to the top
+	unsigned int M = vRefl.size();
+
+	for(unsigned int i=1; i<M; i++) {
+		hitPoint.Solve(vStc[1], vStc[0], vRefl[i], tRefl, tTran);
+		vRefl[i] = tTran;
+	}
+
+
+	rRp = 0.0;
+	rRs = 0.0;
+
+	double phsFactor;
+	ComplexNumber cplx;
+	COMPLEX phsCplx;
+
+	COMPLEX rp_cplx;
+	COMPLEX rs_cplx;
+
+	unsigned int m = 0;
+	while(m < M) {
+
+		phsCplx.real = cos(vRefl[m].GetRayPhase());
+		phsCplx.imag = sin(vRefl[m].GetRayPhase());
+
+		cout << phsCplx.real << endl;
+		cout << vRefl[m].GetRayAmp_p() << endl;
+		cout << phsCplx.imag << endl;
+
+//		phsFactor = cplx.Magnitude(phsCplx);
+//		phsFactor *= phsFactor;
+
+//		rRp = rRp + vRefl[m].GetRayAmp_p() * phsFactor;
+//		rRs = rRs + vRefl[m].GetRayAmp_s() * phsFactor;
+
+		
+		m++;
+	}
 
 	return;
 }

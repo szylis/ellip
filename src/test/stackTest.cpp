@@ -40,68 +40,73 @@ public:
 
 //first layer
 		vStack.push_back(new Layer{air});
-		singleLayer.Solve(vStack, laser, rpOne, rsOne);
-		singleLayer.Solve(vStack, laser25deg, rpOne25deg, rsOne25deg);
+//		singleLayer.Solve(vStack, laser, rpOne, rsOne);
+//		singleLayer.Solve(vStack, laser25deg, rpOne25deg, rsOne25deg);
 
 //second layer
 		vStack.push_back(new Layer{glass});
-		twoLayers.Solve(vStack, laser, rpTwo, rsTwo);
-		twoLayers.Solve(vStack, laser25deg, rpTwo25deg, rsTwo25deg);
+//		twoLayers.Solve(vStack, laser, rpTwo, rsTwo);
+//		twoLayers.Solve(vStack, laser25deg, rpTwo25deg, rsTwo25deg);
 
 //third layer
 		vStack.push_back(new Layer{si});
 		threeLayers.Solve(vStack, laser, rpThree, rsThree);
-		threeLayers.Solve(vStack, laser, rpThree25deg, rsThree25deg);
+//		threeLayers.Solve(vStack, laser, rpThree25deg, rsThree25deg);
 };
 
 //deconstructor:
 	~OpticStack() {};
 };
-
-TEST_F(OpticStack, ReflectionRp0degLayersLessThan2) {
+/*
+TEST_F(OpticStack, LessThan2LayersReflectionRp0deg) {
 	ASSERT_DOUBLE_EQ(rpOne, 0.0);
 }
 
-TEST_F(OpticStack, ReflectionRs0degLayersLessThan2) {
+TEST_F(OpticStack, LessThan2LayersReflectionRs0deg) {
 	ASSERT_DOUBLE_EQ(rsOne, 0.0);
 }
 
-TEST_F(OpticStack, ReflectionRp25degLayersLessThan2) {
+TEST_F(OpticStack, LessThan2LayersReflectionRp25deg) {
 	ASSERT_DOUBLE_EQ(rpOne25deg, 0.0);
 }
 
-TEST_F(OpticStack, ReflectionRs25degLayersLessThan2) {
+TEST_F(OpticStack, LessThan2LayersReflectionRs25deg) {
 	ASSERT_DOUBLE_EQ(rsOne25deg, 0.0);
 }
 
-TEST_F(OpticStack, ReflectionRp0degTwoLayers) {
+
+TEST_F(OpticStack, TwoLayersReflectionRp0deg) {
 	ASSERT_DOUBLE_EQ(rpTwo, 0.04);
 }
 
-TEST_F(OpticStack, ReflectionRs0degTwoLayers) {
+TEST_F(OpticStack, TwoLayersReflectionRs0deg) {
 	ASSERT_DOUBLE_EQ(rsTwo, 0.04);
 }
 
-TEST_F(OpticStack, ReflectionRp25degTwoLayers) {
+TEST_F(OpticStack, TwoLayersReflectionRp25deg) {
 	ASSERT_NEAR(rpTwo25deg, 0.0297493, 0.0000001);
 }
 
-TEST_F(OpticStack, ReflectionRs25degTwoLayers) {
+TEST_F(OpticStack, TwoLayersReflectionRs25deg) {
 	ASSERT_NEAR(rsTwo25deg, 0.0516235, 0.0000001);
 }
+*/
 
-TEST_F(OpticStack, ReflectionRp0degThreeLayers) {
+TEST_F(OpticStack, ThreeLayersReflectionRp0deg) {
 	ASSERT_NEAR(rpThree, 0.04332, 0.00001);
 }
 
-TEST_F(OpticStack, ReflectionRs0degThreeLayers) {
+/*
+TEST_F(OpticStack, ThreeLayersReflectionRs0deg) {
 	ASSERT_NEAR(rsThree,  0.04332, 0.0001);
 }
-
-TEST_F(OpticStack, ReflectionRp25degThreeLayers) {
+/*
+TEST_F(OpticStack, ThreeLayersReflectionRp25deg) {
 	ASSERT_NEAR(rpThree25deg, 0.04452, 0.0001);
 }
 
-TEST_F(OpticStack, ReflectionRs25degThreeLayers) {
+TEST_F(OpticStack, ThreeLayersReflectionRs25deg) {
 	ASSERT_NEAR(rsThree25deg, 0.05109, 0.0001);
 }
+
+*/

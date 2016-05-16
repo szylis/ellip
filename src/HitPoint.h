@@ -36,10 +36,10 @@ public:
 
 private:
 	void ReflectionPhaseShift(Ray&);
-	void Reflectance(Layer&, Layer&, Ray&, Ray&);
+	void Reflection(Layer&, Layer&, Ray&, Ray&);
 
 	void RefractionAngle(Layer&, Layer&, Ray&, Ray&);
-	void Transmittance(Layer&, Layer&, Ray&, Ray&);
+	void Transmission(Layer&, Layer&, Ray&, Ray&);
 
 	void AlterPhase(Layer&, Ray&);
 
@@ -80,11 +80,11 @@ void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRef
 
 	if(rInc.GetRayDirection()) {	//top-down propagation
 		AlterPhase(rTopLayer, rRefl);
-		Reflectance(rTopLayer, rBottomLayer, rInc, rRefl);
+		Reflection(rTopLayer, rBottomLayer, rInc, rRefl);
 	}
 	else {	//bottom-up propagation
 		AlterPhase(rBottomLayer, rRefl);
-		Reflectance(rBottomLayer, rTopLayer, rInc, rRefl);
+		Reflection(rBottomLayer, rTopLayer, rInc, rRefl);
 	}
 
 
@@ -102,13 +102,13 @@ void HitPoint::Solve(Layer& rTopLayer, Layer& rBottomLayer, Ray& rInc, Ray& rRef
 		rRefr.SetRayLayer(rInc.GetRayLayer()+1);
 		RefractionAngle(rTopLayer, rBottomLayer, rInc, rRefr);
 		AlterPhase(rBottomLayer, rRefr);
-		Transmittance(rTopLayer, rBottomLayer, rInc, rRefr);
+		Transmission(rTopLayer, rBottomLayer, rInc, rRefr);
 	}
 	else {	//bottom-up propagation
 		rRefr.SetRayLayer(rInc.GetRayLayer()-1);
 		RefractionAngle(rBottomLayer, rTopLayer, rInc, rRefr);
 		AlterPhase(rTopLayer, rRefr);
-		Transmittance(rBottomLayer, rTopLayer, rInc, rRefr);
+		Transmission(rBottomLayer, rTopLayer, rInc, rRefr);
 	}
 }
 
@@ -152,20 +152,20 @@ void HitPoint::RefractionAngle(Layer& rA, Layer& rB, Ray& rI, Ray& rR) {
 }
 
 //reflectance coefficient
-void HitPoint::Reflectance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
+void HitPoint::Reflection(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
 
-	rR.SetRayAmp_p(FindRp(rTop, rBottom, rInc));
-	rR.SetRayAmp_s(FindRs(rTop, rBottom, rInc));
+	rR.SetRayAmp_p( rInc.GetRayAmp_p() * sqrt(FindRp(rTop, rBottom, rInc)) );
+	rR.SetRayAmp_s( rInc.GetRayAmp_s() * sqrt(FindRs(rTop, rBottom, rInc)) );
 
 }
 //transmittance coefficient
-void HitPoint::Transmittance(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
+void HitPoint::Transmission(Layer& rTop, Layer& rBottom, Ray& rInc, Ray& rR) {
 
-	rR.SetRayAmp_p(1.0 - FindRp(rTop, rBottom, rInc));
-	rR.SetRayAmp_s(1.0 - FindRs(rTop, rBottom, rInc));
+	rR.SetRayAmp_p( rInc.GetRayAmp_p() * sqrt(1.0 - FindRp(rTop, rBottom, rInc)) );
+	rR.SetRayAmp_s( rInc.GetRayAmp_s() * sqrt(1.0 - FindRs(rTop, rBottom, rInc)) );
 }
 
-//p-type polarization for reflectance
+//reflectance of p-type polarization
 double HitPoint::FindRp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;
@@ -184,7 +184,7 @@ double HitPoint::FindRp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	return rp * rp;
 }
 
-//s-type polarization for reflectance
+//reflectance of s-type polarization
 double HitPoint::FindRs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;

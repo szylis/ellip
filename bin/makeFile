@@ -13,13 +13,13 @@ BIN_DIR="../bin"
 #run compiler
 
 #comlex numeber class test
-g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/complexTest.cpp ${LIB_DIR}/libgmock.a -o complexTest -lm
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/complexTest.cpp ${LIB_DIR}/libgmock.a -o complexTest -lm
 
 #ray class test
-g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/rayTest.cpp ${LIB_DIR}/libgmock.a -o rayTest -lm
+#g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/rayTest.cpp ${LIB_DIR}/libgmock.a -o rayTest -lm
 
 #layer class test
-g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/layerTest.cpp ${LIB_DIR}/libgmock.a -o layerTest -lm
+#g++ -std=c++11 -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/layerTest.cpp ${LIB_DIR}/libgmock.a -o layerTest -lm
 
 #hit point class test
 g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/hitPointTest.cpp ${LIB_DIR}/libgmock.a -o hitPointTest -lm
