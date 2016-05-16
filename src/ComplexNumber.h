@@ -12,15 +12,23 @@
 
 #ifndef MY_PI
 #define MY_PI 3.141592653589793238
-#endif 
+#endif
+
+#ifndef DEG_TO_RAD
+#define DEG_TO_RAD(x) (x*MY_PI)/(180)
+#endif
+
+#ifndef RAD_TO_DEG
+#define RAD_TO_DEG(x) (x*180)/(MY_PI)
+#endif
 
 struct COMPLEX {
 
 public:
 	double real, imag;
 
-	COMPLEX() { real = 0; imag = 0; }
-	COMPLEX(double x) { real = x; imag = 0; }
+	COMPLEX() { real = 0.0; imag = 0.0; }
+	COMPLEX(double x) { real = x; imag = 0.0; }
 	COMPLEX(double x, double y) { real = x, imag = y; }
 };
 
@@ -46,14 +54,14 @@ public:
 
 //phase
 	double Phase(COMPLEX complex) const {
-		if(complex.real == 0 && complex.imag == 0)
-			return 0;
+		if(complex.real == 0.0 && complex.imag == 0.0)
+			return 0.0;
 
-		if(complex.real == 0 && complex.imag > 0)
-			return 90 * (MY_PI/180);
+		if(complex.real == 0.0 && complex.imag > 0.0)
+			return DEG_TO_RAD(90);
 
-		if(complex.real == 0 && complex.imag < 0)
-			return -90 * (MY_PI/180);
+		if(complex.real == 0.0 && complex.imag < 0.0)
+			return DEG_TO_RAD(-90);
 
 		return atan(complex.imag/complex.real);
 	}
@@ -133,7 +141,7 @@ public:
 		COMPLEX complex;
 		complex.real = sqrt( (a.real + Magnitude(a))/2 );
 		complex.imag = sqrt( (-a.real + Magnitude(a))/2 );
-		if(a.imag<0) complex.imag *= -1.0;
+		if(a.imag<0.0) complex.imag *= -1.0;
 		return complex;
 	}
 };

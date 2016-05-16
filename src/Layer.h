@@ -8,7 +8,9 @@
  *	- thickness
  *	- position number (counting from the top (air -> substrate),
  *		where layer number 0 is assumed to be air)
- * 
+ *
+ * NOTE: If you set a layer at 0 postion the 0.0um thickness is forced
+ *
  */
 
 #ifndef Layer_h
@@ -22,8 +24,6 @@ public:
 
 //constructors
 	Layer();
-	Layer(int);
-	Layer(int, COMPLEX);
 	Layer(int, COMPLEX, double);
 	~Layer();
 
@@ -50,18 +50,6 @@ private:
 Layer::Layer() {
 	position = 0;
 	refractiveIndex = {1.0, 0.0};
-	thickness = 0.0;
-}
-
-Layer::Layer(int x) {
-	position = x;
-	refractiveIndex = {1.0, 0.0};
-	thickness = 0.0;
-}
-
-Layer::Layer(int x, COMPLEX y) {
-	position = x;
-	refractiveIndex = y;
 	thickness = 0.0;
 }
 
@@ -100,7 +88,7 @@ double Layer::GetThickness() const {
 
 void Layer::SetThickness(double x) {
 	thickness = x;
-	if(position==0) { thickness = 0.0; }	//to keep uniform thickness of top layer 
+	if(position==0) { thickness = 0.0; }	//to keep uniform thickness of top layer
 }
 
 

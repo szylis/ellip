@@ -26,12 +26,7 @@ public:
 
 //constructor prototypes
 	Ray();
-	Ray(double);
-	Ray(double, double, double);
-	Ray(double, double, double, double);
-	Ray(double, double, double, double, double);
-	Ray(double, double, double, double, double, bool);
-	Ray(double, double, double, double, double, bool, int); 
+	Ray(double, double, double, double, double, bool, int);
 	~Ray();
 
 //prototypes
@@ -58,7 +53,7 @@ public:
 
 //members
 private:
-	
+
 	double angle;		//angle of propagation
 	double amp_p;		//'p' type polarization amplitude
 	double amp_s;		//'s' type polarization amplitude
@@ -76,56 +71,6 @@ Ray::Ray() {
 	phase = 0.0;
 	wavelength = 1.0;
 	direction = true;
-	layer = 0;
-}
-
-Ray::Ray(double x) {
-	angle = x;
-	amp_p = 1.0;
-	amp_s = 1.0;
-	phase = 0.0;
-	wavelength = 1.0;
-	direction = true;
-	layer = 0;
-}
-
-Ray::Ray(double x, double p, double s) {
-	angle = x;
-	amp_p = p;
-	amp_s = s;
-	phase = 0.0;
-	wavelength = 1.0;
-	direction = true;
-	layer = 0;
-}
-
-Ray::Ray(double x, double p, double s, double y) {
-	angle = x;
-	amp_p = p;
-	amp_s = s;
-	phase = y;
-	wavelength = 1.0;
-	direction = true;
-	layer = 0;
-}
-
-Ray::Ray(double x, double p, double s, double y, double w) {
-	angle = x;
-	amp_p = p;
-	amp_s = s; 
-	phase = y;
-	wavelength = w;
-	direction = true;
-	layer = 0;
-}
-
-Ray::Ray(double x, double p, double s, double y, double w, bool d) {
-	angle = x;
-	amp_p = p;
-	amp_s = s;
-	phase = y;
-	wavelength = w;
-	direction = d;
 	layer = 0;
 }
 
@@ -199,7 +144,5 @@ int Ray::GetRayLayer() const {
 void Ray::SetRayLayer(int x) {
 	layer = x;
 }
-
-
 
 #endif
