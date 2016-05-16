@@ -32,7 +32,7 @@ public:
 //constructor:
 	OpticStack(): air(0, {1.0, 0.0}, 0.0),
 			glass(1, {1.5, 0.0}, 0.1),
-			si(2, {3.4, 0.4}, 1.0),
+			si(2, {3.4, 0.0}, 1.0),
 			laser(0.0, 1.0, 1.0, 0.0, 0.632, true, 0),
 			laser25deg(25.0, 1.0, 1.0, 0.0, 0.632, true, 0) {
 
@@ -93,7 +93,7 @@ TEST_F(OpticStack, TwoLayersReflectionRs25deg) {
 */
 
 TEST_F(OpticStack, ThreeLayersReflectionRp0deg) {
-	ASSERT_NEAR(rpThree, 0.04332, 0.00001);
+	ASSERT_NEAR(rpThree, 0.04363, 0.00001);
 }
 
 /*

@@ -65,6 +65,7 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 	for(unsigned int i=0; i<N-1; i++)
 	{
 		hitPoint.Solve(vStc[i], vStc[i+1], vTran[i], tRefl, tTran);
+
 		vTran.push_back(new Ray{tTran});	//add transmitted beam
 		vRefl.push_back(new Ray{tRefl});	//add reflected beam
 	}
@@ -74,7 +75,8 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 	unsigned int M = vRefl.size();
 
 	for(unsigned int i=1; i<M; i++) {
-		hitPoint.Solve(vStc[1], vStc[0], vRefl[i], tRefl, tTran);
+		hitPoint.Solve(vStc[1], vStc[0], vRefl[1], tRefl, tTran);
+//		cout << tTran.GetRayAmp_p() << endl;
 		vRefl[i] = tTran;
 	}
 
@@ -90,14 +92,19 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 	COMPLEX rs_cplx;
 
 	unsigned int m = 0;
-	while(m < M) {
+//	while(m < M) {
 
-		phsCplx.real = cos(vRefl[m].GetRayPhase());
-		phsCplx.imag = sin(vRefl[m].GetRayPhase());
+		double a = vTran[1].GetRayAmp_p() * cos(vTran[1].GetRayPhase());
+		double b = vTran[1].GetRayAmp_s() * sin(vTran[1].GetRayPhase());
+		
 
-		cout << phsCplx.real << endl;
-		cout << vRefl[m].GetRayAmp_p() << endl;
-		cout << phsCplx.imag << endl;
+		cout << "a = " << a << endl;
+		cout << "ib = " << b << endl;
+//		cout << "r23 = " << vRefl[1].GetRayAmp_p() << endl;
+
+//		double y = cos(vTran[1].GetRayPhase());
+//		cout << "cos(t0.phase) = " << y << endl;
+//		cout << "t0 = " << vTran[1].GetRayAmp_p() << endl;
 
 //		phsFactor = cplx.Magnitude(phsCplx);
 //		phsFactor *= phsFactor;
@@ -106,8 +113,8 @@ void LayerStack::Solve(ptr_vector<Layer> vStc, Ray& rIn, double& rRp, double& rR
 //		rRs = rRs + vRefl[m].GetRayAmp_s() * phsFactor;
 
 		
-		m++;
-	}
+//		m++;
+//	}
 
 	return;
 }

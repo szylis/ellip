@@ -121,23 +121,23 @@ TEST_F(RayHitPoint, RefractionLayerCheck) {
 
 
 TEST_F(RayHitPoint, RefractionAmplitudeP0deg) {
-	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1.0 - 0.04)*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), (1.0 - sqrt(0.04))*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeP30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1.0 - 0.0252491)*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), (1.0 - sqrt(0.0252491))*inc.GetRayAmp_p(), 0.00001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeS0deg) {
-	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1.0 - 0.04)*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), (1.0 - sqrt(0.04))*inc.GetRayAmp_p(), 0.0000001);
 }
 
 TEST_F(RayHitPoint, RefractionAmplitudeS30deg) {
 	inc.SetRayAngle(30.0);
 	hitPoint.Solve(air, glass, inc, refl, refr);
-	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1.0 - 0.0577961)*inc.GetRayAmp_p(), 0.0000001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), (1.0 - sqrt(0.0577961))*inc.GetRayAmp_p(), 0.001);
 }
 
 TEST_F(RayHitPoint, RefrectionAngle0deg) {
@@ -259,7 +259,7 @@ TEST_F(RayHitPoint, BackwardRayRefractionAngleTest) {
 	hitPoint.Solve(air, glass, inc, refl, refr);
 
 	double b = asin((glass.GetRefractiveIndex().real/air.GetRefractiveIndex().real)*(sin(inc.GetRayAngle() * MY_PI/180)));
-	ASSERT_THAT(refr.GetRayAngle(), b*180/MY_PI);
+	ASSERT_THAT(refr.GetRayAngle(), RAD_TO_DEG(b));
 }
 
 
@@ -274,7 +274,7 @@ TEST_F(RayHitPoint, BackwardRayRefractionPhase) {
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
 	double kvec = (2*MY_PI)/(inc.GetRayWavelength()/glass.GetRefractiveIndex().real);
-	double x = glass.GetThickness()/cos(refr.GetRayAngle()*MY_PI/180);
+	double x = glass.GetThickness()/cos(DEG_TO_RAD(refr.GetRayAngle()));
 
 	ASSERT_THAT(refr.GetRayPhase(), kvec*x);
 }
@@ -291,9 +291,9 @@ TEST_F(RayHitPoint, BackwardRayReflectionPhase) {
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
 	double kvec = (2*MY_PI)/(inc.GetRayWavelength()/TiO2.GetRefractiveIndex().real);
-	double x = TiO2.GetThickness()/cos(refl.GetRayAngle()*MY_PI/180);
+	double x = TiO2.GetThickness()/cos(DEG_TO_RAD(refl.GetRayAngle()));
 
-	ASSERT_NEAR(refl.GetRayPhase(), kvec*x+MY_PI, 0.001);
+	ASSERT_NEAR(refl.GetRayPhase(), kvec*x, 0.001);
 }
 
 
@@ -335,7 +335,7 @@ TEST_F(RayHitPoint, BackwardRayTransmittanceBothPolarization) {
 
 	hitPoint.Solve(glass, TiO2, inc, refl, refr);
 
-	ASSERT_NEAR(refr.GetRayAmp_p(), sqrt(1-0.017074), 0.000001);
-	ASSERT_NEAR(refr.GetRayAmp_s(), sqrt(1-0.106413), 0.000001);
+	ASSERT_NEAR(refr.GetRayAmp_p(), 1-sqrt(0.017074), 0.0001);
+	ASSERT_NEAR(refr.GetRayAmp_s(), 1-sqrt(0.106413), 0.0001);
 }
 
