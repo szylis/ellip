@@ -3,8 +3,8 @@
  *
  * This class is designed to solve complex number arithmetics
  *
- */ 
- 
+ */
+
 
 #ifndef ComplexNumber_h
 #define ComplexNumber_h
