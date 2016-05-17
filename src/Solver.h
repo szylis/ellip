@@ -33,11 +33,15 @@ public:
 	void SolveReflection(Layer&, Layer&, Layer&, Ray&);
 	void SolveTransmission(Layer&, Layer&, Layer&, Ray&);
 
-	COMPLEX GetRs() const { return rs; }
-	COMPLEX GetRp() const { return rp; }
-	COMPLEX GetTs() const { return ts; }
-	COMPLEX GetTp() const { return tp; }
+	COMPLEX Get_rs() const { return rs; }
+	COMPLEX Get_rp() const { return rp; }
+	COMPLEX Get_ts() const { return ts; }
+	COMPLEX Get_tp() const { return tp; }
 
+	double GetReflectanceS() const { return Rs; }
+	double GetReflectanceP() const { return Rp; }
+	double GetTransmittanceS() const { return Ts.real; }
+	double GetTransmittanceP() const { return Tp.real; }
 
 //methods
 private:
@@ -45,22 +49,22 @@ private:
 	void RefractionAngle(Layer&, Layer&, Ray&, Ray&);
 	double PhaseDifference(Layer&, Ray&);
 
-	COMPLEX FindRs(Layer&, Layer&, Ray&);
-	COMPLEX FindRp(Layer&, Layer&, Ray&);
-	COMPLEX FindTs(Layer&, Layer&, Ray&);
-	COMPLEX FindTp(Layer&, Layer&, Ray&);
+	COMPLEX Find_rs(Layer&, Layer&, Ray&);
+	COMPLEX Find_rp(Layer&, Layer&, Ray&);
+	COMPLEX Find_ts(Layer&, Layer&, Ray&);
+	COMPLEX Find_tp(Layer&, Layer&, Ray&);
 
-	void SolveFilmReflection(COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&, double&);
-<<<<<<< HEAD
-	void SolveFilmTransmission(COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&,
-				COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&, double&);
-=======
+	void SolveFilmReflection(COMPLEX (&)[2], COMPLEX (&)[2], double&);
+	void SolveFilmTransmission(COMPLEX (&)[2], COMPLEX (&)[2], COMPLEX (&)[2], COMPLEX (&)[2], double&, COMPLEX&);
 
->>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
-
+	void FindReflectance();
+	void FindTransmittance(COMPLEX&);
+	
 //members
 private:
 	COMPLEX rs, rp, ts, tp;
+	double Rs, Rp;
+	COMPLEX Ts, Tp;
 };
 
 //constructor
@@ -76,8 +80,8 @@ Solver::~Solver() {
 //method for solving the structure in terms of reflection
 void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
 
-	COMPLEX rs12, rp12;
-	COMPLEX rs23, rp23;
+	COMPLEX rs[2];		//0 - rs12, 1 - rs23
+	COMPLEX rp[2];		//0 - rp12, 1 - rp23
 	double phs;
 
 //setup refracted ray
@@ -86,30 +90,24 @@ void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc
 	RefractionAngle(rLay1, rLay2, rInc, refr);
 
 //find the reflection coefficient
-	rs12 = FindRs(rLay1, rLay2, rInc);
-	rp12 = FindRp(rLay1, rLay2, rInc);
+	rs[0] = Find_rs(rLay1, rLay2, rInc);
+	rp[0] = Find_rp(rLay1, rLay2, rInc);
 
-	rs23 = FindRs(rLay2, rLay3, refr);
-	rp23 = FindRp(rLay2, rLay3, refr);
+	rs[1] = Find_rs(rLay2, rLay3, refr);
+	rp[1] = Find_rp(rLay2, rLay3, refr);
 
 //optical length difference
 	phs = PhaseDifference(rLay2, refr);
 
 //find the total reflectivity of optical film
-	SolveFilmReflection(rs12, rp12, rs23, rp23, phs);
+	SolveFilmReflection(rs, rp, phs);
 
 }
 
-<<<<<<< HEAD
 //find rp and rs for total stack of layers
-void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
-
-//complex representation of phase difference
-=======
-void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
+void Solver::SolveFilmReflection(COMPLEX (&rRs)[2], COMPLEX (&rRp)[2], double& rPhs) {
 
 //complex represtation of phase difference
->>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 	COMPLEX phasor;
 	phasor.real = cos(rPhs);
 	phasor.imag = sin(rPhs)*-1.0;
@@ -119,69 +117,81 @@ void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23,
 	ComplexNumber cplx;
 	COMPLEX cXrp, cXrs, cYrp, cYrs;
 
-	cXrs = cplx.Mul(rRs23, phasor);
-	cXrp = cplx.Mul(rRp23, phasor);
+	cXrs = cplx.Mul(rRs[1], phasor);
+	cXrp = cplx.Mul(rRp[1], phasor);
 
-	cYrs = cplx.Add(1.0, cplx.Mul(rRs12, cXrs));
-	cYrp = cplx.Add(1.0, cplx.Mul(rRp12, cXrp));
+	cYrs = cplx.Add(1.0, cplx.Mul(rRs[0], cXrs));
+	cYrp = cplx.Add(1.0, cplx.Mul(rRp[0], cXrp));
 
-	cXrs = cplx.Add(rRs12, cXrs);
-	cXrp = cplx.Add(rRp12, cXrp);
+	cXrs = cplx.Add(rRs[0], cXrs);
+	cXrp = cplx.Add(rRp[0], cXrp);
 
 	rs = cplx.Div(cXrs, cYrs);
 	rp = cplx.Div(cXrp, cYrp);
 
+	FindReflectance();
 }
 
-//method for solving the structure in terms of transmission - NOT FINISHED YET
+//reflectance as real number assuming the input intensity of light for both polarzation equal 1
+void Solver::FindReflectance() {
+
+	ComplexNumber cplx;
+	Rp = cplx.Magnitude(rp);
+	Rp = Rp * Rp;
+
+	Rs = cplx.Magnitude(rs);
+	Rs = Rs * Rs;
+}
+
+//method for solving the structure in terms of transmission
 void Solver::SolveTransmission(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
 
-	COMPLEX ts12, tp12;
-	COMPLEX ts23, tp23;
-<<<<<<< HEAD
-	COMPLEX rs12, rs23;
-	COMPLEX rp12, rp23;
+	COMPLEX ts[2], tp[2];
+	COMPLEX rs[2], rp[2];
 	double phs;
 
 //setup refracted ray
-=======
-
-//setup refractiona ray
->>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 	Ray refr;
 	refr = rInc;
 	RefractionAngle(rLay1, rLay2, rInc, refr);
 
-<<<<<<< HEAD
 //find the transmission coefficient
-=======
-//find the reflection coefficinete
->>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
-	ts12 = FindTs(rLay1, rLay2, rInc);
-	tp12 = FindTp(rLay1, rLay2, rInc);
+	ts[0] = Find_ts(rLay1, rLay2, rInc);
+	tp[0] = Find_tp(rLay1, rLay2, rInc);
 
-	ts23 = FindTs(rLay2, rLay3, refr);
-	tp23 = FindTp(rLay2, rLay3, refr);
-<<<<<<< HEAD
+	ts[1] = Find_ts(rLay2, rLay3, refr);
+	tp[1] = Find_tp(rLay2, rLay3, refr);
 
 //find the reflection coefficient
-	rs12 = FindRs(rLay1, rLay2, rInc);
-	rp12 = FindRp(rLay1, rLay2, rInc);
+	rs[0] = Find_rs(rLay1, rLay2, rInc);
+	rp[0] = Find_rp(rLay1, rLay2, rInc);
 
-	rs23 = FindRs(rLay2, rLay3, refr);
-	rp23 = FindRp(rLay2, rLay3, refr);
+	rs[1] = Find_rs(rLay2, rLay3, refr);
+	rp[1] = Find_rp(rLay2, rLay3, refr);
 
 //optical length difference
 	phs = PhaseDifference(rLay2, refr);
 
-//find the total transmission of an optical film
-	SolveFilmTransmission(ts12, tp12, ts23, tp23, rs12, rp12, rs23, rp23, phs);
+//find transmittance factor
+	Ray tran;
+	tran = refr;
+	RefractionAngle(rLay2, rLay3, refr, tran);
+
+	ComplexNumber cplx;
+	COMPLEX tCX, tCY, tFactor;
+
+	tCX = cplx.Mul(rLay3.GetRefractiveIndex(), cos(DEG_TO_RAD(tran.GetRayAngle())));
+	tCY = cplx.Mul(rLay1.GetRefractiveIndex(), cos(DEG_TO_RAD(rInc.GetRayAngle())));
+
+	tFactor = cplx.Div(tCX, tCY);
+
+//find the total transmission coefficient of an optical film
+	SolveFilmTransmission(ts, tp, rs, rp, phs, tFactor);
 
 }
 
 //find tp and ts for total stack of layers
-void Solver::SolveFilmTransmission(COMPLEX& rTs12, COMPLEX& rTp12, COMPLEX& rTs23, COMPLEX& rTp23,
-	COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
+void Solver::SolveFilmTransmission(COMPLEX (&rTs)[2], COMPLEX (&rTp)[2], COMPLEX (&rRs)[2], COMPLEX (&rRp)[2], double& rPhs, COMPLEX& rTfactor) {
 
 //complex representation of phase difference
 	COMPLEX phasor;
@@ -191,24 +201,31 @@ void Solver::SolveFilmTransmission(COMPLEX& rTs12, COMPLEX& rTp12, COMPLEX& rTs2
 	COMPLEX phrDiv2;
 	phrDiv2.real = cos(rPhs/2.0);
 	phrDiv2.imag = sin(rPhs/2.0) * -1.0;
-=======
-}
->>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 
-
-//solve the reflection of film
 	ComplexNumber cplx;
 	COMPLEX cXtp, cXts, cYtp, cYts;
 
-	cXts = cplx.Mul(rTs12, cplx.Mul(rTs23, phrDiv2));
-	cXtp = cplx.Mul(rTp12, cplx.Mul(rTp23, phrDiv2));
+	cXts = cplx.Mul(rTs[0], cplx.Mul(rTs[1], phrDiv2));
+	cXtp = cplx.Mul(rTp[0], cplx.Mul(rTp[1], phrDiv2));
 
-	cYts = cplx.Add(1.0, cplx.Mul(rRs12, cplx.Mul(rRs23, phasor)));
-	cYtp = cplx.Add(1.0, cplx.Mul(rRp12, cplx.Mul(rRp23, phasor)));
+	cYts = cplx.Add(1.0, cplx.Mul(rRs[0], cplx.Mul(rRs[1], phasor)));
+	cYtp = cplx.Add(1.0, cplx.Mul(rRp[0], cplx.Mul(rRp[1], phasor)));
 
 	ts = cplx.Div(cXts, cYts);
 	tp = cplx.Div(cXtp, cYtp);
 
+	FindTransmittance(rTfactor);
+}
+
+//transmittance as real number assuming the input intensity of light for both polarzation equal 1
+void Solver::FindTransmittance(COMPLEX& rTfactor) {
+
+	ComplexNumber cplx;
+	Tp = cplx.Magnitude(tp);
+	Tp = cplx.Mul(rTfactor, cplx.Mul(Tp, Tp));
+
+	Ts = cplx.Magnitude(ts);
+	Ts = cplx.Mul(rTfactor, cplx.Mul(Ts, Ts));
 }
 
 // ----- PRIVATE METHODS -----
@@ -239,8 +256,8 @@ void Solver::RefractionAngle(Layer& rA, Layer& rB, Ray& rI, Ray& rR) {
 	}
 }
 
-//reflectance of p-type polarization
-COMPLEX Solver::FindRp(Layer& rTop, Layer& rBottom, Ray& rInc) {
+//reflection coefficient of p-type polarization
+COMPLEX Solver::Find_rp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;
 
@@ -253,12 +270,11 @@ COMPLEX Solver::FindRp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	COMPLEX cYp = cplx.Mul(rBottom.GetRefractiveIndex(), cos(DEG_TO_RAD(rInc.GetRayAngle())));	// n2*cos(theta)
 	COMPLEX cZp = cplx.Mul(rTop.GetRefractiveIndex(), cX);
 
-	//reflectance p- polarization
 	return cplx.Div(cplx.Sub(cZp, cYp), cplx.Add(cZp, cYp));
 }
 
-//transmittance of p-type polarization
-COMPLEX Solver::FindTp(Layer& rTop, Layer& rBottom, Ray& rInc) {
+//transmission coefficient of p-type polarization
+COMPLEX Solver::Find_tp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;
 
@@ -272,13 +288,12 @@ COMPLEX Solver::FindTp(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	COMPLEX cWp = cplx.Mul(rTop.GetRefractiveIndex(), cos(DEG_TO_RAD(rInc.GetRayAngle())));		// n1*cos(theta)
 	COMPLEX cZp = cplx.Mul(rTop.GetRefractiveIndex(), cX);
 
-	//reflectance p- polarization
 	return cplx.Div(cplx.Mul(2.0, cWp), cplx.Add(cZp, cYp));
 }
 
 
-//reflectance of s-type polarization
-COMPLEX Solver::FindRs(Layer& rTop, Layer& rBottom, Ray& rInc) {
+//reflection coefficient of s-type polarization
+COMPLEX Solver::Find_rs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;
 
@@ -291,12 +306,11 @@ COMPLEX Solver::FindRs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	COMPLEX cYs = cplx.Mul(rTop.GetRefractiveIndex(), cos(DEG_TO_RAD(rInc.GetRayAngle())));	// n1*cos(theta)
 	COMPLEX cZs = cplx.Mul(rBottom.GetRefractiveIndex(), cX);
 
-	//reflectance s- polarization
 	return cplx.Div(cplx.Sub(cYs, cZs), cplx.Add(cYs, cZs));
 }
 
-//transmittance of s-type polarization
-COMPLEX Solver::FindTs(Layer& rTop, Layer& rBottom, Ray& rInc) {
+//transmission coefficient of s-type polarization
+COMPLEX Solver::Find_ts(Layer& rTop, Layer& rBottom, Ray& rInc) {
 
 	ComplexNumber cplx;
 
@@ -309,8 +323,6 @@ COMPLEX Solver::FindTs(Layer& rTop, Layer& rBottom, Ray& rInc) {
 	COMPLEX cYs = cplx.Mul(rTop.GetRefractiveIndex(), cos(DEG_TO_RAD(rInc.GetRayAngle())));	// n1*cos(theta)
 	COMPLEX cZs = cplx.Mul(rBottom.GetRefractiveIndex(), cX);
 
-
-	//reflectance s- polarization
 	return cplx.Div(cplx.Mul(2.0, cYs), cplx.Add(cYs, cZs));
 }
 
