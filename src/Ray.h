@@ -26,6 +26,7 @@ public:
 
 //constructor prototypes
 	Ray();
+	Ray(double, double, double, double, double);
 	Ray(double, double, double, double, double, bool, int);
 	~Ray();
 
@@ -70,6 +71,16 @@ Ray::Ray() {
 	amp_s = 1.0;
 	phase = 0.0;
 	wavelength = 1.0;
+	direction = true;
+	layer = 0;
+}
+
+Ray::Ray(double x, double p, double s, double y, double w) {
+	angle = x;
+	amp_p = p;
+	amp_s = s;
+	phase = y;
+	wavelength = w;
 	direction = true;
 	layer = 0;
 }
