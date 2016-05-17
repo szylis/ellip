@@ -108,3 +108,31 @@ TEST_F(Solution, Transmittance_P_20deg) {
 	ASSERT_NEAR(solver.GetTransmittanceP(), 0.734136, 0.0001);
 }
 
+TEST_F(Solution, Ellipsometry_PSI_60deg) {
+	inc.SetRayAngle(60.0);
+	glass.SetThickness(0.1);
+	solver.SolveEllipsometry(air, glass, si, inc);
+	ASSERT_NEAR(solver.GetPsi(), 44.14, 0.01);
+}
+
+TEST_F(Solution, Ellipsometry_DEL_60deg) {
+	inc.SetRayAngle(60.0);
+	glass.SetThickness(0.1);
+	solver.SolveEllipsometry(air, glass, si, inc);
+	ASSERT_NEAR(solver.GetDel(), 103.40, 0.01);
+}
+
+
+TEST_F(Solution, Ellipsometry_PSI_70deg) {
+	inc.SetRayAngle(70.0);
+	glass.SetThickness(0.1);
+	solver.SolveEllipsometry(air, glass, si, inc);
+	ASSERT_NEAR(solver.GetPsi(), 42.28, 0.01);
+}
+
+TEST_F(Solution, Ellipsometry_DEL_70deg) {
+	inc.SetRayAngle(70.0);
+	glass.SetThickness(0.1);
+	solver.SolveEllipsometry(air, glass, si, inc);
+	ASSERT_NEAR(solver.GetDel(), 69.48, 0.01);
+}

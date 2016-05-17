@@ -32,11 +32,15 @@ public:
 public:
 	void SolveReflection(Layer&, Layer&, Layer&, Ray&);
 	void SolveTransmission(Layer&, Layer&, Layer&, Ray&);
+	void SolveEllipsometry(Layer&, Layer&, Layer&, Ray&);
 
 	COMPLEX Get_rs() const { return rs; }
 	COMPLEX Get_rp() const { return rp; }
 	COMPLEX Get_ts() const { return ts; }
 	COMPLEX Get_tp() const { return tp; }
+
+	double GetPsi() const { return psi; }
+	double GetDel() const { return del; }
 
 	double GetReflectanceS() const { return Rs; }
 	double GetReflectanceP() const { return Rp; }
@@ -59,12 +63,14 @@ private:
 
 	void FindReflectance();
 	void FindTransmittance(COMPLEX&);
-	
+
 //members
 private:
 	COMPLEX rs, rp, ts, tp;
 	double Rs, Rp;
 	COMPLEX Ts, Tp;
+
+	double psi, del;
 };
 
 //constructor
@@ -76,6 +82,20 @@ Solver::~Solver() {
 
 
 //public method
+
+void Solver::SolveEllipsometry(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
+
+	ComplexNumber cplx;
+	SolveReflection(rLay1, rLay2, rLay3, rInc);
+
+//PSI
+	psi = RAD_TO_DEG(atan((cplx.Magnitude(rp)) / (cplx.Magnitude(rs))));
+
+//DEL
+	del = RAD_TO_DEG(cplx.Phase(cplx.Div(rp, rs)));
+	if(del < 0.0) del += 180.0;		// <--- NEED TO CHECK IT
+}
+
 
 //method for solving the structure in terms of reflection
 void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
