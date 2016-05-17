@@ -50,6 +50,9 @@ private:
 	COMPLEX FindTs(Layer&, Layer&, Ray&);
 	COMPLEX FindTp(Layer&, Layer&, Ray&);
 
+	void SolveFilmReflection(COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&, double&);
+
+
 //members
 private:
 	COMPLEX rs, rp, ts, tp;
@@ -68,14 +71,11 @@ Solver::~Solver() {
 //method for solving the structure
 void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
 
-
-	COMPLEX rs12, rp12, ts12, tp12;
-	COMPLEX rs23, rp23, ts23, tp23;
-	COMPLEX phasor;
+	COMPLEX rs12, rp12;
+	COMPLEX rs23, rp23;
 	double phs;
 
-/*
-//setup refractiona ray
+//setup refracted ray
 	Ray refr;
 	refr = rInc;
 	RefractionAngle(rLay1, rLay2, rInc, refr);
@@ -83,46 +83,49 @@ void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc
 //find the reflection coefficinete
 	rs12 = FindRs(rLay1, rLay2, rInc);
 	rp12 = FindRp(rLay1, rLay2, rInc);
-	ts12 = FindTs(rLay1, rLay2, rInc);
-	tp12 = FindTp(rLay1, rLay2, rInc);
 
 	rs23 = FindRs(rLay2, rLay3, refr);
 	rp23 = FindRp(rLay2, rLay3, refr);
-	ts23 = FindTs(rLay2, rLay3, refr);
-	tp23 = FindTp(rLay2, rLay3, refr);
 
-//phasor - optical length difference
+//optical length difference
 	phs = PhaseDifference(rLay2, refr);
-	phasor.real = cos(phs);
-	phasor.imag = sin(phs)*-1.0;
 
-//complex math
+//find the total reflectivity of optical film
+	SolveFilmReflection(rs12, rp12, rs23, rp23, phs);
+
+}
+
+void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
+
+//complex represtation of phase difference
+	COMPLEX phasor;
+	phasor.real = cos(rPhs);
+	phasor.imag = sin(rPhs)*-1.0;
+
+
+//solve the reflection of film
 	ComplexNumber cplx;
 	COMPLEX cXrp, cXrs, cYrp, cYrs;
 
-	cXrs = cplx.Mul(rs23, phasor);
-	cXrp = cplx.Mul(rp23, phasor);
+	cXrs = cplx.Mul(rRs23, phasor);
+	cXrp = cplx.Mul(rRp23, phasor);
 
-	cYrs = cplx.Add(1.0, cplx.Mul(rs12, cXrs));
-	cYrp = cplx.Add(1.0, cplx.Mul(rp12, cXrp));
+	cYrs = cplx.Add(1.0, cplx.Mul(rRs12, cXrs));
+	cYrp = cplx.Add(1.0, cplx.Mul(rRp12, cXrp));
 
-	cXrs = cplx.Add(rs12, cXrs);
-	cXrp = cplx.Add(rp12, cXrp);
+	cXrs = cplx.Add(rRs12, cXrs);
+	cXrp = cplx.Add(rRp12, cXrp);
 
 	rs = cplx.Div(cXrs, cYrs);
 	rp = cplx.Div(cXrp, cYrp);
-*/
+
 }
 
 //method for solving the structure
 void Solver::SolveTransmission(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc) {
 
-/*
-	COMPLEX rs12, rp12, ts12, tp12;
-	COMPLEX rs23, rp23, ts23, tp23;
-	COMPLEX phasor;
-	double phs;
-
+	COMPLEX ts12, tp12;
+	COMPLEX ts23, tp23;
 
 //setup refractiona ray
 	Ray refr;
@@ -130,37 +133,11 @@ void Solver::SolveTransmission(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rI
 	RefractionAngle(rLay1, rLay2, rInc, refr);
 
 //find the reflection coefficinete
-	rs12 = FindRs(rLay1, rLay2, rInc);
-	rp12 = FindRp(rLay1, rLay2, rInc);
 	ts12 = FindTs(rLay1, rLay2, rInc);
 	tp12 = FindTp(rLay1, rLay2, rInc);
 
-	rs23 = FindRs(rLay2, rLay3, refr);
-	rp23 = FindRp(rLay2, rLay3, refr);
 	ts23 = FindTs(rLay2, rLay3, refr);
 	tp23 = FindTp(rLay2, rLay3, refr);
-
-//phasor - optical length difference
-	phs = PhaseDifference(rLay2, refr);
-	phasor.real = cos(phs);
-	phasor.imag = sin(phs)*-1.0;
-
-//complex math
-	ComplexNumber cplx;
-	COMPLEX cXrp, cXrs, cYrp, cYrs;
-
-	cXrs = cplx.Mul(rs23, phasor);
-	cXrp = cplx.Mul(rp23, phasor);
-
-	cYrs = cplx.Add(1.0, cplx.Mul(rs12, cXrs));
-	cYrp = cplx.Add(1.0, cplx.Mul(rp12, cXrp));
-
-	cXrs = cplx.Add(rs12, cXrs);
-	cXrp = cplx.Add(rp12, cXrp);
-
-	rs = cplx.Div(cXrs, cYrs);
-	rp = cplx.Div(cXrp, cYrp);
-*/
 }
 
 
