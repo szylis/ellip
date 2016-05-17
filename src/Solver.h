@@ -51,8 +51,12 @@ private:
 	COMPLEX FindTp(Layer&, Layer&, Ray&);
 
 	void SolveFilmReflection(COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&, double&);
+<<<<<<< HEAD
 	void SolveFilmTransmission(COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&,
 				COMPLEX&, COMPLEX&, COMPLEX&, COMPLEX&, double&);
+=======
+
+>>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 
 //members
 private:
@@ -96,10 +100,16 @@ void Solver::SolveReflection(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rInc
 
 }
 
+<<<<<<< HEAD
 //find rp and rs for total stack of layers
 void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
 
 //complex representation of phase difference
+=======
+void Solver::SolveFilmReflection(COMPLEX& rRs12, COMPLEX& rRp12, COMPLEX& rRs23, COMPLEX& rRp23, double& rPhs) {
+
+//complex represtation of phase difference
+>>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 	COMPLEX phasor;
 	phasor.real = cos(rPhs);
 	phasor.imag = sin(rPhs)*-1.0;
@@ -128,21 +138,31 @@ void Solver::SolveTransmission(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rI
 
 	COMPLEX ts12, tp12;
 	COMPLEX ts23, tp23;
+<<<<<<< HEAD
 	COMPLEX rs12, rs23;
 	COMPLEX rp12, rp23;
 	double phs;
 
 //setup refracted ray
+=======
+
+//setup refractiona ray
+>>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 	Ray refr;
 	refr = rInc;
 	RefractionAngle(rLay1, rLay2, rInc, refr);
 
+<<<<<<< HEAD
 //find the transmission coefficient
+=======
+//find the reflection coefficinete
+>>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 	ts12 = FindTs(rLay1, rLay2, rInc);
 	tp12 = FindTp(rLay1, rLay2, rInc);
 
 	ts23 = FindTs(rLay2, rLay3, refr);
 	tp23 = FindTp(rLay2, rLay3, refr);
+<<<<<<< HEAD
 
 //find the reflection coefficient
 	rs12 = FindRs(rLay1, rLay2, rInc);
@@ -171,6 +191,9 @@ void Solver::SolveFilmTransmission(COMPLEX& rTs12, COMPLEX& rTp12, COMPLEX& rTs2
 	COMPLEX phrDiv2;
 	phrDiv2.real = cos(rPhs/2.0);
 	phrDiv2.imag = sin(rPhs/2.0) * -1.0;
+=======
+}
+>>>>>>> 89bf0a9dd6e0e9a791b43207489446801ed4cd3a
 
 
 //solve the reflection of film
