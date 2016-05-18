@@ -119,7 +119,7 @@ TEST_F(Solution, Ellipsometry_DEL_60deg) {
 	inc.SetRayAngle(60.0);
 	glass.SetThickness(0.1);
 	solver.SolveEllipsometry(air, glass, si, inc);
-	ASSERT_NEAR(solver.GetDel(), 103.40, 0.01);
+	ASSERT_NEAR(solver.GetDel(), -76.6, 0.01);
 }
 
 

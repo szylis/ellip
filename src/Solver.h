@@ -93,7 +93,7 @@ void Solver::SolveEllipsometry(Layer& rLay1, Layer& rLay2, Layer& rLay3, Ray& rI
 
 //DEL
 	del = RAD_TO_DEG(cplx.Phase(cplx.Div(rp, rs)));
-	if(del < 0.0) del += 180.0;		// <--- NEED TO CHECK IT
+//	if(del < 0.0) del += 180.0;		// <--- NEED TO CHECK IT
 }
 
 
