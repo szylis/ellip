@@ -11,6 +11,8 @@
  *
  * NOTE: If you set a layer at 0 postion the 0.0um thickness is forced
  *
+ * This program is distibuteted for free, but WITHOUT ANY WARRANTY
+ *
  */
 
 #ifndef Layer_h

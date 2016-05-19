@@ -1,14 +1,18 @@
+/* Copyright (C) 2016 Szymon Lis	email: szymonlis@yahoo.com
+ * 					twitter: @drSzymonLis
+ *
+ * The example script of usage the ellipsometry solver.
+ * Scrip solves the ellipsometry parameters for various thickness of
+ * middle layer for single wavelength.
+ *
+ *
+ *
+ * This program is distibuteted for free, but WITHOUT ANY WARRANTY
+ */
 
-
-#include <iostream>
-#include <cstdio>
+#include <stdio.h>
 #include <cmath>
-#include "ComplexNumber.h"
-#include "Ray.h"
-#include "Layer.h"
 #include "Solver.h"
-
-using namespace std;
 
 int main()
 {

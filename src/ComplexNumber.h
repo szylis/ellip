@@ -3,6 +3,8 @@
  *
  * This class is designed to solve complex number arithmetics
  *
+ *
+ * This program is distibuteted for free, but WITHOUT ANY WARRANTY
  */
 
 

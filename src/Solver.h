@@ -1,7 +1,8 @@
 /* Copyright (C) 2016 Szymon Lis	email: szymonlis@yahoo.com
  * 					twitter: @drSzymonLis
  *
- * This class is designed to solve the reflection and transmiision for optical film
+ * This class is designed to solve the reflectance,transmittance and 
+ * ellipsometric parameters (DEL, PSI) for optical structure consists of three layer.
  *
  * To solve the problem, use the public method SolveReflection:
  *	- Layer - reference to Layer class holding material where from light is coming
@@ -9,7 +10,8 @@
  *	- Layer - reference to Layer Class holding the substrate
  *	- Ray - reference to Ray class holding the incident light beam
  *
- *	This program is distibuteted for free, but WITHOUT ANY WARRANTY
+ *
+ * This program is distibuteted for free, but WITHOUT ANY WARRANTY
  */
 
 #ifndef Solver_h
@@ -18,8 +20,6 @@
 #include "ComplexNumber.h"
 #include "Layer.h"
 #include "Ray.h"
-
-#include <iostream>
 
 class Solver {
 
@@ -34,14 +34,18 @@ public:
 	void SolveTransmission(Layer&, Layer&, Layer&, Ray&);
 	void SolveEllipsometry(Layer&, Layer&, Layer&, Ray&);
 
+
+//getters
 	COMPLEX Get_rs() const { return rs; }
 	COMPLEX Get_rp() const { return rp; }
 	COMPLEX Get_ts() const { return ts; }
 	COMPLEX Get_tp() const { return tp; }
 
+//ellipsometry
 	double GetPsi() const { return psi; }
 	double GetDel() const { return del; }
 
+//transmittance and reflectance
 	double GetReflectanceS() const { return Rs; }
 	double GetReflectanceP() const { return Rp; }
 	double GetTransmittanceS() const { return Ts.real; }

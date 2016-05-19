@@ -28,7 +28,7 @@ BIN_DIR="../bin"
 #g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -I${BOOST_DIR} -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/stackTest.cpp ${LIB_DIR}/libgmock.a -o stackTest -lm
 
 #solver class test
-g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -I${BOOST_DIR} -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/solverTest.cpp ${LIB_DIR}/libgmock.a -o solverTest -lm
+#g++ -std=c++11 -Wno-deprecated-declarations -isystem ${GTEST_DIR}/include -isystem ${GMOCK_DIR}/include -I${BOOST_DIR} -pthread ${SRC_DIR}/test/mainTest.cpp ${SRC_DIR}/test/solverTest.cpp ${LIB_DIR}/libgmock.a -o solverTest -lm
 
 #user interface
-#g++ -std=c++11 -pthread ${SRC_DIR}/main.cpp -o ellip 
+g++ -std=c++11 -pthread ${SRC_DIR}/main.cpp -o ellip 

@@ -12,6 +12,8 @@
  *	- direction (true: for transmission towards substrate; false: towards air)
  *	- layer where ray is at particular moment
  *
+ *
+ * This program is distibuteted for free, but WITHOUT ANY WARRANTY
  */
 
 #ifndef Ray_h
